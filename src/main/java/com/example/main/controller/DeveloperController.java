@@ -19,8 +19,9 @@ public class DeveloperController {
 	private DeveloperService developerService;
 
 	
-	@GetMapping("/getEmployeeDetails")
-	public ResponseEntity<Employee> getEmployeeDetails(@RequestBody String employeeId) throws Exception {
+	@GetMapping("/getEmployeeDetails/{employeeId}")
+	public ResponseEntity<Employee> getEmployeeDetails(@PathVariable String employeeId) throws Exception {
+
 
 		Employee employeeDetails = developerService.getEmployeeDetails(employeeId);
 		return new ResponseEntity<Employee>(employeeDetails, HttpStatus.OK);
