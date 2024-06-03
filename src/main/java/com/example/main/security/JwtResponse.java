@@ -1,7 +1,7 @@
 package com.example.main.security;
 
 
-import com.example.main.entity.Admin;
+import com.example.main.entity.Employee;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JwtResponse {
 	
-	private Admin admin;
+	private Employee employee;
 	private String jwtToken;
 
 }

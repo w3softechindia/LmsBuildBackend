@@ -1,6 +1,7 @@
 package com.example.main.security;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,15 +12,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.main.entity.Admin;
 import com.example.main.entity.Employee;
-import com.example.main.repository.AdminRepository;
 import com.example.main.repository.EmployeeRepository;
 
 @Service
 public class JwtServiceImplementation implements UserDetailsService {
-	@Autowired
-	private AdminRepository adminRepository;
 	
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -36,7 +33,7 @@ public class JwtServiceImplementation implements UserDetailsService {
 		authenticate(employeeId, password);
 
 		UserDetails userDetails = loadUserByUsername(employeeId);
-		Optional<Admin> user = adminRepository.findById(employeeId);
+		Optional<Employee> user = employeeRepository.findById(employeeId);
 		String token = jwtUtil.generateToken(userDetails);
 		return new JwtResponse(user.get(), token);
 
