@@ -12,14 +12,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+
 import com.example.main.entity.Employee;
 import com.example.main.repository.EmployeeRepository;
 
 @Service
 public class JwtServiceImplementation implements UserDetailsService {
+
 	
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -29,16 +32,20 @@ public class JwtServiceImplementation implements UserDetailsService {
 
 	public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
 		String employeeId = jwtRequest.getEmployeeId();
-		String password = jwtRequest.getPassword();
+		String password = jwtRequest.getEmployeePassword();
 		authenticate(employeeId, password);
 
 		UserDetails userDetails = loadUserByUsername(employeeId);
 		Optional<Employee> user = employeeRepository.findById(employeeId);
 		String token = jwtUtil.generateToken(userDetails);
 		return new JwtResponse(user.get(), token);
+		
 
 	}
+	
 
+	
+	
 	@Override
 	public UserDetails loadUserByUsername(String employeeId) throws UsernameNotFoundException {
 		Employee user = employeeRepository.findById(employeeId)
@@ -47,7 +54,7 @@ public class JwtServiceImplementation implements UserDetailsService {
 		return new org.springframework.security.core.userdetails.User(user.getEmployeeId(), user.getEmployeePassword(),
 				user.getAuthorities());
 	}
-
+	
 	private void authenticate(String employeeId, String password) throws Exception {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(employeeId, password));

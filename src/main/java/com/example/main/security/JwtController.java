@@ -15,4 +15,5 @@ public class JwtController {
 	public JwtResponse generateToken(@RequestBody JwtRequest jwtRequest) throws Exception {
 		return jwtServiceImplementation.createJwtToken(jwtRequest);
 	}
+	
 }
