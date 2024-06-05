@@ -13,8 +13,6 @@ import com.example.main.entity.Role;
 
 import com.example.main.repository.EmployeeRepository;
 import com.example.main.repository.RoleRepository;
-//import com.example.main.entity.Admin;
-//import com.example.main.repository.AdminRepository;
 import com.example.main.service.AdminService;
 
 @Service
@@ -57,19 +55,11 @@ public class AdminImpl implements AdminService {
 	
 	@Override
 	public Employee addAdmin(Employee admin) {
-//		Role role = roleRepository.findById("Admin").get();
-//		Set<Role> AdminRole = new HashSet<>();
-//		AdminRole.add(role);
-//
-//		String encodedPassword = getEncodedPassword(admin.getPassword());
-//		admin.setPassword(encodedPassword);
-//		admin.setRole(Admin);
-//		return adminRepository.save(admin);
 		
 		Role role = roleRepository.findById("Admin").get();
 		Set<Role> adminRole = new HashSet<>();
 		adminRole.add(role);
-		admin.setRole(adminRole);
+		admin.setRoles(adminRole);
 		String encodedPassword = getEncodedPassword(admin.getEmployeePassword());
 		admin.setEmployeePassword(encodedPassword);
 		return employeeRepository.save(admin);
@@ -81,7 +71,7 @@ public class AdminImpl implements AdminService {
 		Role role = roleRepository.findById(roleName).get();
 		Set<Role> employeeRole = new HashSet<>();
 		employeeRole.add(role);
-		employee.setRole(employeeRole);
+		employee.setRoles(employeeRole);
 		String encodedPassword = getEncodedPassword(employee.getEmployeePassword());
 		employee.setEmployeePassword(encodedPassword);
 		return employeeRepository.save(employee);

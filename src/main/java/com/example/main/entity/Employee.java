@@ -41,12 +41,12 @@ public class Employee implements UserDetails{
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "Employee_Roles",joinColumns = {@JoinColumn(name="Employee_Id")},inverseJoinColumns = {@JoinColumn(name="Role_Name")})
-	private Set<Role> role = new HashSet<>();
+	private Set<Role> roles = new HashSet<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<Authority> authorities = new HashSet<>();
-		 this.role.forEach(userRole->{
+		 this.roles.forEach(userRole->{
 			 authorities.add(new Authority("ROLE_"+userRole.getRoleName()));
 		 });
 	        return authorities;
