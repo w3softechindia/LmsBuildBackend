@@ -2,6 +2,7 @@ package com.example.main.entity;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,6 +45,9 @@ public class Employee implements UserDetails{
 	@JoinTable(name = "Employee_Roles",joinColumns = {@JoinColumn(name="Employee_Id")},inverseJoinColumns = {@JoinColumn(name="Role_Name")})
 	private Set<Role> roles = new HashSet<>();
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "employee")
+	private List<Team> team;
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<Authority> authorities = new HashSet<>();
