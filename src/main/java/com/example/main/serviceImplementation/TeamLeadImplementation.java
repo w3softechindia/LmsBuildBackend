@@ -14,7 +14,9 @@ import com.example.main.entity.Role;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.SubCourseRepository;
 import com.example.main.entity.Team;
+
 import com.example.main.exception.ResourceNotFound;
+
 import com.example.main.repository.CourseRepository;
 import com.example.main.repository.EmployeeRepository;
 import com.example.main.repository.TeamRepository;
@@ -60,6 +62,31 @@ public class TeamLeadImplementation implements TeamLeadService {
 	}
 
 	@Override
+	public Course addCourse(Course course) throws Exception {
+
+//		if (courseRepository.existsById(course.getCourseName())) {
+//			throw new Exception("Course already exists");
+//		}
+		Course course2 = courseRepository.save(course);
+		for (SubCourse subCourse : course.getSubCourses()) {
+			subCourse.setCourse(course);
+			subCourseRepository.save(subCourse);
+		}
+
+		course2.setSubCourses(course.getSubCourses());
+		return course2;
+	}
+
+	@Override
+	public Team addTeamToEmployee(Team team, String employeeId) throws Exception {
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new Exception("Employee not found "));
+		Team team2 = teamRepository.save(team);
+
+		team2.setEmployee(employee);
+		teamRepository.save(team);
+		return team;
+
 	public Course addCourse(Course course, List<SubCourse> subCourses) throws Exception {
 
 		Course savedCourse = courseRepository.save(course);
@@ -104,6 +131,7 @@ public class TeamLeadImplementation implements TeamLeadService {
 	public List<Course> getAllCourses() throws Exception {
 		List<Course> all = courseRepository.findAll();
 		return all;
+
 	}
 
 }

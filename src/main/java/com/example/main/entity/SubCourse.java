@@ -1,6 +1,8 @@
 package com.example.main.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,6 +23,8 @@ public class SubCourse {
 	private int subCourseDuration;
 
 	@ManyToOne
+
 	@JsonBackReference
+
 	private Course course;
 }

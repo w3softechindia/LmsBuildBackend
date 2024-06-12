@@ -10,4 +10,5 @@ public interface AdminService {
 	public Employee addEmployee(Employee employee,String roleName);
 	
 	public Employee addAdmin(Employee admin);
+	
 }
