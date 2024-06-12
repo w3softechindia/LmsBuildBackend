@@ -49,7 +49,7 @@ public class JwtServiceImplementation implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String employeeId) throws UsernameNotFoundException {
 		Employee user = employeeRepository.findById(employeeId)
-				.orElseThrow(() -> new UsernameNotFoundException("Email not found..!!!"));
+				.orElseThrow(() -> new UsernameNotFoundException("EmployeeId not found..!!!"));
 
 		return new org.springframework.security.core.userdetails.User(user.getEmployeeId(), user.getEmployeePassword(),
 				user.getAuthorities());

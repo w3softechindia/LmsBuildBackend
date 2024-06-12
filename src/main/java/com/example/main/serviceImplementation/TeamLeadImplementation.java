@@ -14,6 +14,7 @@ import com.example.main.entity.Role;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.SubCourseRepository;
 import com.example.main.entity.Team;
+import com.example.main.exception.ResourceNotFound;
 import com.example.main.repository.CourseRepository;
 import com.example.main.repository.EmployeeRepository;
 import com.example.main.repository.TeamRepository;
@@ -59,30 +60,50 @@ public class TeamLeadImplementation implements TeamLeadService {
 	}
 
 	@Override
-	public Course addCourse(Course course) throws Exception {
+	public Course addCourse(Course course, List<SubCourse> subCourses) throws Exception {
 
-//		if (courseRepository.existsById(course.getCourseName())) {
-//			throw new Exception("Course already exists");
-//		}
-		Course course2 = courseRepository.save(course);
-		for (SubCourse subCourse : course.getSubCourses()) {
-			subCourse.setCourse(course);
+		Course savedCourse = courseRepository.save(course);
+
+		for (SubCourse subCourse : subCourses) {
+			subCourse.setCourse(savedCourse);
 			subCourseRepository.save(subCourse);
 		}
 
-		course2.setSubCourses(course.getSubCourses());
-		return course2;
+		savedCourse.setSubCourses(subCourses);
+		return courseRepository.save(savedCourse);
 	}
 
 	@Override
-	public Team addTeamToEmployee(Team team, String employeeId) throws Exception {
-		Employee employee = employeeRepository.findById(employeeId)
-				.orElseThrow(() -> new Exception("Employee not found "));
-		Team team2 = teamRepository.save(team);
+	public Team addTeamToEmployee(Team team, String teamleadId) throws Exception {
+		Employee teamlead = employeeRepository.findById(teamleadId)
+				.orElseThrow(() -> new ResourceNotFound("Team lead with ID " + teamleadId + " not found"));
 
-		team2.setEmployee(employee);
-		teamRepository.save(team);
-		return team;
+		List<Employee> employees = new ArrayList<>();
+
+		for (Employee emp : team.getEmployee()) {
+			Employee employee = employeeRepository.findById(emp.getEmployeeId())
+					.orElseThrow(() -> new ResourceNotFound("Employee with ID " + emp.getEmployeeId() + " not found"));
+			employees.add(employee);
+			employee.setTeam(team);
+		}
+
+		Set<Course> course = new HashSet<>();
+		for(Course course2:team.getCourse()) {
+			Course course3 = courseRepository.findById(course2.getCourseName()).orElseThrow(() -> new ResourceNotFound("Course ID not found"));
+			course.add(course3);
+		}
+
+		team.setCourse(course);
+		team.setEmployee(employees);
+		team.setTeamLeadId(teamlead.getEmployeeId());
+
+		return teamRepository.save(team);
+	}
+
+	@Override
+	public List<Course> getAllCourses() throws Exception {
+		List<Course> all = courseRepository.findAll();
+		return all;
 	}
 
 }

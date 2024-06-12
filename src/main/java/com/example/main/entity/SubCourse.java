@@ -1,5 +1,7 @@
 package com.example.main.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -19,5 +21,6 @@ public class SubCourse {
 	private int subCourseDuration;
 
 	@ManyToOne
+	@JsonBackReference
 	private Course course;
 }
