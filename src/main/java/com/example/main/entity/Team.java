@@ -29,14 +29,8 @@ import lombok.NoArgsConstructor;
 public class Team {
 	@Id
 	private String teamName;
-
-	@ManyToOne
-	private Employee employee;
-
-}
-\
 	private String teamLeadId;
-//	private String courseName;
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
 	@JsonManagedReference
 	private List<Employee> employee;
