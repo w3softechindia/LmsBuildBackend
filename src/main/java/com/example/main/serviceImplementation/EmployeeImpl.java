@@ -14,15 +14,6 @@ import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 
 @Service
-public class EmployeeImpl implements EmployeeService {
-
-import org.springframework.stereotype.Service;
-
-import com.example.main.entity.Employee;
-import com.example.main.repository.EmployeeRepository;
-import com.example.main.service.EmployeeService;
-
-@Service
 public class EmployeeImpl implements EmployeeService{
 
 
