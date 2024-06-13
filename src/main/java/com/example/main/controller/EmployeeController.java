@@ -36,23 +36,6 @@ public class EmployeeController {
 	public ResponseEntity<Employee> updateEmployeeDetails(@PathVariable String employeeId,
 			@RequestBody Employee employee) throws Exception {
 
-
-	@Autowired
-	private EmployeeService employeeService;
-
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-	@GetMapping("/getEmployeeDetails/{employeeId}")
-	public ResponseEntity<Employee> getEmployeeDetails(@PathVariable String employeeId) throws Exception {
-
-		Employee employeeDetails = employeeService.getEmployeeDetails(employeeId);
-		return new ResponseEntity<Employee>(employeeDetails, HttpStatus.OK);
-	}
-
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-	@PutMapping("/updateEmployeeDetails/{employeeId}")
-	public ResponseEntity<Employee> updateEmployeeDetails(@PathVariable String employeeId,
-			@RequestBody Employee employee) throws Exception {
-
 		Employee updateEmployeeDetails = employeeService.updateEmployeeDetails(employeeId, employee);
 		return new ResponseEntity<Employee>(updateEmployeeDetails, HttpStatus.OK);
 	}

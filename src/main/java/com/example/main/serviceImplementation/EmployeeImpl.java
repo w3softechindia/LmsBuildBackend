@@ -22,9 +22,6 @@ public class EmployeeImpl implements EmployeeService{
 	private EmployeeRepository employeeRepository;
 	
 	@Autowired
-	private SubCourseRepository subCourseRepository;
-	
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
@@ -71,8 +68,7 @@ public class EmployeeImpl implements EmployeeService{
 	@Override
 	public Course getCourseByName(String courseName) throws Exception {
 		Course getCourse = courseRepository.findById(courseName).orElseThrow(() -> new Exception("Course not found"));
-		return employeeRepository.save(existingEmployee);
-
+		return getCourse;
 	}
 
 }

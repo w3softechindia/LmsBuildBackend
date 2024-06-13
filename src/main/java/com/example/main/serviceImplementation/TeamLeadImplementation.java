@@ -44,6 +44,7 @@ public class TeamLeadImplementation implements TeamLeadService {
 		return employee;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public List<Employee> getAllEmployees() {
 

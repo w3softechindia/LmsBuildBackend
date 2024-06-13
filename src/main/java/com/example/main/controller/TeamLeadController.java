@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-import java.util.stream.Collectors;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,26 +42,6 @@ public class TeamLeadController {
 		List<Employee> emp = teamLeadService.getAllEmployees();
 		return ResponseEntity.ok(emp);
 	}
-
-	
-
-	@PreAuthorize("hasRole('TeamLead')")
-	@PostMapping("/addCourse")
-	public ResponseEntity<Course> addCourse(@RequestBody Course course) throws Exception {
-		Course course2 = teamLeadService.addCourse(course);
-		return ResponseEntity.ok(course2);
-
-	}
-	
-	@PreAuthorize("hasRole('TeamLead')")
-	@PostMapping("/addTeamToEmployee/{employeeId}")
-	public ResponseEntity<Team> addTeamToEmployee(@RequestBody Team team,@PathVariable String employeeId) throws Exception{
-		Team employee = teamLeadService.addTeamToEmployee(team, employeeId);
-		return ResponseEntity.ok(employee);
-		
-	}
-	
-
 
 	@PreAuthorize("hasRole('TeamLead')")
 	@PostMapping("/addCourse")

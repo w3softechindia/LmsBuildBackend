@@ -1,6 +1,5 @@
 package com.example.main.entity;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,11 +23,6 @@ public class Team {
 	@Id
 	private String teamName;
 
-	@ManyToOne
-	private Employee employee;
-
-}
-\
 	private String teamLeadId;
   
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
