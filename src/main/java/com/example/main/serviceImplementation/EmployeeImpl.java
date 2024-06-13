@@ -69,6 +69,7 @@ public class EmployeeImpl implements EmployeeService{
 	public Course getCourseByName(String courseName) throws Exception {
 		Course getCourse = courseRepository.findById(courseName).orElseThrow(() -> new Exception("Course not found"));
 		return employeeRepository.save(existingEmployee);
+
 	}
 
 }
