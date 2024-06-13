@@ -50,9 +50,6 @@ public class EmployeeImpl implements EmployeeService{
 		existingEmployee.setEmployeeEmail(employee.getEmployeeEmail());
 		existingEmployee.setEmployeePassword(employee.getEmployeePassword());
 		existingEmployee.setPhoneNumber(employee.getPhoneNumber());
-
-    
-
 		return employeeRepository.save(existingEmployee);
 	}
 
@@ -70,7 +67,12 @@ public class EmployeeImpl implements EmployeeService{
 
 	@Override
 	public Course getCourseByName(String courseName) throws Exception {
+		Course getCourse = courseRepository.findById(courseName).orElseThrow(() -> new Exception("Course not found"));
+		return employeeRepository.save(existingEmployee);
+	}
 
+	@Override
+	public Course getCourseByName(String courseName) throws Exception {
 	Course getCourse = courseRepository.findById(courseName).orElseThrow(() -> new Exception("Course not found"));
 		return getCourse;
 	}
