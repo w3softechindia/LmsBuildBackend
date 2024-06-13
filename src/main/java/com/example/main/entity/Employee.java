@@ -51,11 +51,6 @@ public class Employee implements UserDetails{
 	@JoinTable(name = "Employee_Roles",joinColumns = {@JoinColumn(name="Employee_Id")},inverseJoinColumns = {@JoinColumn(name="Role_Name")})
 	private Set<Role> roles = new HashSet<>();
 
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "employee")
-	private List<Team> team;
-
-	
 	@ManyToOne
 	@JsonBackReference
 	private Team team;
