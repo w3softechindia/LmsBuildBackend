@@ -23,8 +23,6 @@ public class SubCourse {
 	private int subCourseDuration;
 
 	@ManyToOne
-
 	@JsonBackReference
-
 	private Course course;
 }
