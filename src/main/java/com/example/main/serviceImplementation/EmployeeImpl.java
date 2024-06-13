@@ -80,12 +80,7 @@ public class EmployeeImpl implements EmployeeService{
 	@Override
 	public Course getCourseByName(String courseName) throws Exception {
 
-
-		return employeeRepository.save(existingEmployee);
-	}
-
-
-		Course getCourse = courseRepository.findById(courseName).orElseThrow(() -> new Exception("Course not found"));
+	Course getCourse = courseRepository.findById(courseName).orElseThrow(() -> new Exception("Course not found"));
 		return getCourse;
 	}
 }
