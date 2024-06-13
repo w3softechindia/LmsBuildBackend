@@ -1,6 +1,7 @@
 package com.example.main.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 import java.util.stream.Collectors;
@@ -16,15 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import com.example.main.entity.Course;
-import com.example.main.entity.Employee;
-
 import com.example.main.dto.CourseDto;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.SubCourse;
-
 import com.example.main.entity.Team;
 import com.example.main.service.TeamLeadService;
 

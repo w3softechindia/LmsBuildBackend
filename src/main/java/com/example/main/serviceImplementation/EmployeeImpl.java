@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.SubCourseRepository;
 
 @Service
 public class EmployeeImpl implements EmployeeService{
@@ -19,8 +20,10 @@ public class EmployeeImpl implements EmployeeService{
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
-
-
+	
+	@Autowired
+	private SubCourseRepository subCourseRepository;
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
