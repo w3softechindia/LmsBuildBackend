@@ -63,10 +63,6 @@ public class TeamLeadImplementation implements TeamLeadService {
 
 	@Override
 	public Course addCourse(Course course) throws Exception {
-
-//		if (courseRepository.existsById(course.getCourseName())) {
-//			throw new Exception("Course already exists");
-//		}
 		Course course2 = courseRepository.save(course);
 		for (SubCourse subCourse : course.getSubCourses()) {
 			subCourse.setCourse(course);
@@ -76,30 +72,7 @@ public class TeamLeadImplementation implements TeamLeadService {
 		course2.setSubCourses(course.getSubCourses());
 		return course2;
 	}
-
-	@Override
-	public Team addTeamToEmployee(Team team, String employeeId) throws Exception {
-		Employee employee = employeeRepository.findById(employeeId)
-				.orElseThrow(() -> new Exception("Employee not found "));
-		Team team2 = teamRepository.save(team);
-
-		team2.setEmployee(employee);
-		teamRepository.save(team);
-		return team;
-
-	public Course addCourse(Course course, List<SubCourse> subCourses) throws Exception {
-
-		Course savedCourse = courseRepository.save(course);
-
-		for (SubCourse subCourse : subCourses) {
-			subCourse.setCourse(savedCourse);
-			subCourseRepository.save(subCourse);
-		}
-
-		savedCourse.setSubCourses(subCourses);
-		return courseRepository.save(savedCourse);
-	}
-
+	
 	@Override
 	public Team addTeamToEmployee(Team team, String teamleadId) throws Exception {
 		Employee teamlead = employeeRepository.findById(teamleadId)
