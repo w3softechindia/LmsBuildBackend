@@ -50,26 +50,6 @@ public class TeamLeadController {
 		return ResponseEntity.ok(emp);
 	}
 
-	
-
-	@PreAuthorize("hasRole('TeamLead')")
-	@PostMapping("/addCourse")
-	public ResponseEntity<Course> addCourse(@RequestBody Course course) throws Exception {
-		Course course2 = teamLeadService.addCourse(course);
-		return ResponseEntity.ok(course2);
-
-	}
-	
-	@PreAuthorize("hasRole('TeamLead')")
-	@PostMapping("/addTeamToEmployee/{employeeId}")
-	public ResponseEntity<Team> addTeamToEmployee(@RequestBody Team team,@PathVariable String employeeId) throws Exception{
-		Team employee = teamLeadService.addTeamToEmployee(team, employeeId);
-		return ResponseEntity.ok(employee);
-		
-	}
-	
-
-
 	@PreAuthorize("hasRole('TeamLead')")
 	@PostMapping("/addCourse")
 	public ResponseEntity<Course> addCourse(@RequestBody CourseDto courseDTO) {
