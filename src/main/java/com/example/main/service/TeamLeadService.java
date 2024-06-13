@@ -15,13 +15,6 @@ public interface TeamLeadService {
 	
 	public List<Employee> getAllEmployees();
 	
-
-	public Course addCourse(Course course) throws Exception;
-	
-	public Team addTeamToEmployee(Team team, String employeeId) throws Exception;
-		
-
-	
 	public Team addTeamToEmployee(Team team, String employeeId) throws Exception;
 
 	public Course addCourse(Course course, List<SubCourse> subCourse) throws Exception;
