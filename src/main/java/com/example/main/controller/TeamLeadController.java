@@ -3,11 +3,11 @@ package com.example.main.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,6 +79,29 @@ public class TeamLeadController {
 	public ResponseEntity<List<Course>> getAllCourses() throws Exception {
 		List<Course> list = teamLeadService.getAllCourses();
 		return ResponseEntity.ok(list);
+	}
+
+	@PreAuthorize("hasRole('TeamLead')")
+	@GetMapping("getAllTeams/{employeeId}")
+	public ResponseEntity<List<Team>> getAllTeams(@PathVariable String employeeId) throws Exception {
+		List<Team> teams = teamLeadService.getAllTeams(employeeId);
+		return ResponseEntity.ok(teams);
+
+	}
+
+	@PreAuthorize("hasRole('TeamLead')")
+	@GetMapping("getTeamByName/{teamName}")
+	public ResponseEntity<Team> getTeamByName(@PathVariable String teamName) throws Exception {
+		Team teamByName = teamLeadService.getTeamByName(teamName);
+		return ResponseEntity.ok(teamByName);
+
+	}
+
+	@PreAuthorize("hasRole('TeamLead')")
+	@DeleteMapping("deleteEmployeeFromTeam/{employeeId}")
+	public ResponseEntity<String> deleteEmployeeFromTeam(@PathVariable String employeeId) throws Exception {
+		String deleteEmployeeFromTeam = teamLeadService.deleteEmployeeFromTeam(employeeId);
+		return ResponseEntity.ok(deleteEmployeeFromTeam);
 	}
 
 }

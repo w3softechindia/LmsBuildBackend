@@ -90,8 +90,9 @@ public class TeamLeadImplementation implements TeamLeadService {
 		}
 
 		Set<Course> course = new HashSet<>();
-		for(Course course2:team.getCourse()) {
-			Course course3 = courseRepository.findById(course2.getCourseName()).orElseThrow(() -> new ResourceNotFound("Course ID not found"));
+		for (Course course2 : team.getCourse()) {
+			Course course3 = courseRepository.findById(course2.getCourseName())
+					.orElseThrow(() -> new ResourceNotFound("Course ID not found"));
 			course.add(course3);
 		}
 
@@ -106,6 +107,34 @@ public class TeamLeadImplementation implements TeamLeadService {
 	public List<Course> getAllCourses() throws Exception {
 		List<Course> all = courseRepository.findAll();
 		return all;
+	}
+
+	@Override
+	public List<Team> getAllTeams(String employeeId) throws Exception {
+		return teamRepository.findByTeamLeadId(employeeId);
+
+	}
+
+	@Override
+	public Team getTeamByName(String teamName) throws Exception {
+		return teamRepository.findById(teamName).orElseThrow(() -> new Exception("Team name not found"));
+	}
+
+	@Override
+	public String deleteEmployeeFromTeam(String employeeId) throws Exception {
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new Exception("Employee not found with id: " + employeeId));
+
+		Team team = employee.getTeam();
+		if (team != null) {
+			team.getEmployee().remove(employee);
+			employee.setTeam(null);
+			teamRepository.save(team);
+			employeeRepository.save(employee);
+			return "Employee deleted from the team successfully";
+		} else {
+			throw new Exception("Employee does not belong to any team");
+		}
 	}
 
 }

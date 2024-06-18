@@ -23,7 +23,7 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PreAuthorize("hasAnyRole('Developer', 'Tester', 'TeamLead')")
 	@GetMapping("/getEmployeeDetails/{employeeId}")
 	public ResponseEntity<Employee> getEmployeeDetails(@PathVariable String employeeId) throws Exception {
 
@@ -31,7 +31,8 @@ public class EmployeeController {
 		return new ResponseEntity<Employee>(employeeDetails, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+
+	@PreAuthorize("hasAnyRole('Developer', 'Tester', 'TeamLead')")
 	@PutMapping("/updateEmployeeDetails/{employeeId}")
 	public ResponseEntity<Employee> updateEmployeeDetails(@PathVariable String employeeId,
 			@RequestBody Employee employee) throws Exception {
@@ -40,7 +41,7 @@ public class EmployeeController {
 		return new ResponseEntity<Employee>(updateEmployeeDetails, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PreAuthorize("hasAnyRole('Developer', 'Tester','TeamLead')")
 	@PutMapping("/resetPassword/{employeeId}/{currentPassword}/{newPassword}")
 	public ResponseEntity<Employee> resetPassword(@PathVariable String employeeId,@PathVariable String currentPassword,
 		@PathVariable String newPassword) throws Exception {

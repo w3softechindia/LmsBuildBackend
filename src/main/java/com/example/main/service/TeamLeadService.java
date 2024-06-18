@@ -19,6 +19,11 @@ public interface TeamLeadService {
 	
 	public List<Course> getAllCourses() throws Exception;
 
+	public List<Team> getAllTeams(String employeeId) throws Exception;
+	
+	public Team getTeamByName (String teamName) throws Exception;
+	
+	public String deleteEmployeeFromTeam(String employeeId) throws Exception;
 	
 
 }
