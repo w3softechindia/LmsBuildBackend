@@ -1,20 +1,18 @@
 package com.example.main.controller;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.access.prepost.PreAuthorize;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.example.main.entity.Course;
-
 import com.example.main.entity.Employee;
 import com.example.main.service.EmployeeService;
 
@@ -30,13 +28,11 @@ public class EmployeeController {
 		Employee employeeDetails = employeeService.getEmployeeDetails(employeeId);
 		return new ResponseEntity<Employee>(employeeDetails, HttpStatus.OK);
 	}
-
-
+  
 	@PreAuthorize("hasAnyRole('Developer', 'Tester', 'TeamLead')")
 	@PutMapping("/updateEmployeeDetails/{employeeId}")
 	public ResponseEntity<Employee> updateEmployeeDetails(@PathVariable String employeeId,
 			@RequestBody Employee employee) throws Exception {
-
 		Employee updateEmployeeDetails = employeeService.updateEmployeeDetails(employeeId, employee);
 		return new ResponseEntity<Employee>(updateEmployeeDetails, HttpStatus.OK);
 	}
@@ -49,16 +45,26 @@ public class EmployeeController {
 		Employee resetPassword = employeeService.resetPassword(employeeId, currentPassword, newPassword);
 		return new ResponseEntity<Employee>(resetPassword, HttpStatus.OK);
 	}
+	
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-	@GetMapping("/getCourse/{courseName}")
-	public ResponseEntity<Course> getCourseByName(@PathVariable String courseName) throws Exception {
-		try {
-			Course course = employeeService.getCourseByName(courseName);
-			return ResponseEntity.ok(course);
-		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
-		}
-	}
+	 @PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	 @GetMapping("/getCoursesByEmployeeId/{employeeId}")
+	    public ResponseEntity<Set<Course>> getCoursesByEmployeeId(@PathVariable String employeeId) {
+	        try {
+	            Set<Course> courses = employeeService.getCoursesByEmployeeId(employeeId);
+	            return ResponseEntity.ok(courses);
+	        } catch (Exception e) {
+	            return ResponseEntity.status(404).body(null);
+	        }
+	    }
+	 
+	 @PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	 @GetMapping("/getCourseByCourseName/{courseName}")
+	 public ResponseEntity<Course>getCourseByCourseName(@PathVariable String courseName){
+		 Course courseByCourseName = employeeService.getCourseByCourseName(courseName);
+		 return new ResponseEntity<Course>(courseByCourseName,HttpStatus.OK);
+	 }
+
 }
+
 

@@ -1,22 +1,22 @@
 package com.example.main.serviceImplementation;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.example.main.repository.CourseRepository;
-import com.example.main.repository.EmployeeRepository;
-import com.example.main.service.EmployeeService;
-
 import org.springframework.stereotype.Service;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.repository.CourseRepository;
+import com.example.main.repository.EmployeeRepository;
+import com.example.main.service.EmployeeService;
+
 import com.example.main.entity.SubCourseRepository;
 
-@Service
-public class EmployeeImpl implements EmployeeService{
 
+@Service
+public class EmployeeImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -26,7 +26,6 @@ public class EmployeeImpl implements EmployeeService{
 
 	@Autowired
 	private CourseRepository courseRepository;
-
 
 	@Override
 	public Employee getEmployeeDetails(String employeeId) throws Exception {
@@ -66,9 +65,17 @@ public class EmployeeImpl implements EmployeeService{
 	}
 
 	@Override
-	public Course getCourseByName(String courseName) throws Exception {
-		Course getCourse = courseRepository.findById(courseName).orElseThrow(() -> new Exception("Course not found"));
-		return getCourse;
+	public Set<Course> getCoursesByEmployeeId(String employeeId) throws Exception {
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new Exception("Employee ID not found"));
+		return employee.getTeam().getCourse();
 	}
 
+	@Override
+	public Course getCourseByCourseName(String courseName) {
+		return courseRepository.findById(courseName).orElse(null);
+    }
+
 }
+
+
