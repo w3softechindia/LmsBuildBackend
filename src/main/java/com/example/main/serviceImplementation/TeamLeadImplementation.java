@@ -103,6 +103,7 @@ public class TeamLeadImplementation implements TeamLeadService {
 		return teamRepository.save(team);
 	}
 
+
 	@Override
 	public List<Course> getAllCourses() throws Exception {
 		List<Course> all = courseRepository.findAll();
@@ -137,4 +138,53 @@ public class TeamLeadImplementation implements TeamLeadService {
 		}
 	}
 
+	@Override
+	public Team updateTeam(String teamName, Team updatedTeam) throws Exception {
+	    
+	    Team existingTeam = teamRepository.findById(teamName)
+	            .orElseThrow(() -> new ResourceNotFound("Team with name " + teamName + " not found"));
+	    if (updatedTeam.getCourse() != null && !updatedTeam.getCourse().isEmpty()) {
+	        Course newCourse = updatedTeam.getCourse().iterator().next();
+	        Course foundCourse = courseRepository.findById(newCourse.getCourseName())
+	                .orElseThrow(() -> new ResourceNotFound("Course with name " + newCourse.getCourseName() + " not found"));
+	        Set<Course> updatedCourses = new HashSet<>();
+	        updatedCourses.add(foundCourse);
+	        existingTeam.setCourse(updatedCourses);
+	    }
+	    if (updatedTeam.getEmployee() != null) {
+	        List<Employee> updatedEmployees = new ArrayList<>();
+	        for (Employee emp : updatedTeam.getEmployee()) {
+	            Employee employee = employeeRepository.findById(emp.getEmployeeId()).orElseThrow(() -> new ResourceNotFound("Employee with ID " + emp.getEmployeeId() + " not found"));
+	            updatedEmployees.add(employee);
+	            employee.setTeam(existingTeam);
+	        }
+	        existingTeam.setEmployee(updatedEmployees);
+	    }
+
+	    return teamRepository.save(existingTeam);
+	}
+
+	@Override
+	public String deleteTeam(String teamName) throws Exception {
+	    Team team = teamRepository.findById(teamName)
+	            .orElseThrow(() -> new ResourceNotFound("Team with name " + teamName + " not found"));
+
+	  
+	    List<Employee> employees = team.getEmployee();
+	    for (Employee employee : employees) {
+	        employee.setTeam(null);
+	        employeeRepository.save(employee);
+	    }
+
+	  
+	    Set<Course> courses = team.getCourse();
+	    for (Course course : courses) {
+	        team.getCourse().remove(course);
+	    }	    
+	    teamRepository.delete(team);
+	    return "Team deleted successfully";
+	}
+
+
 }
+

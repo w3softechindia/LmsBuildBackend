@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -77,12 +78,13 @@ public class TeamLeadController {
 	@PreAuthorize("hasRole('TeamLead')")
 	@GetMapping("/getAllCourses")
 	public ResponseEntity<List<Course>> getAllCourses() throws Exception {
+		
 		List<Course> list = teamLeadService.getAllCourses();
 		return ResponseEntity.ok(list);
 	}
 
 	@PreAuthorize("hasRole('TeamLead')")
-	@GetMapping("getAllTeams/{employeeId}")
+	@GetMapping("/getAllTeams/{employeeId}")
 	public ResponseEntity<List<Team>> getAllTeams(@PathVariable String employeeId) throws Exception {
 		List<Team> teams = teamLeadService.getAllTeams(employeeId);
 		return ResponseEntity.ok(teams);
@@ -90,7 +92,7 @@ public class TeamLeadController {
 	}
 
 	@PreAuthorize("hasRole('TeamLead')")
-	@GetMapping("getTeamByName/{teamName}")
+	@GetMapping("/getTeamByName/{teamName}")
 	public ResponseEntity<Team> getTeamByName(@PathVariable String teamName) throws Exception {
 		Team teamByName = teamLeadService.getTeamByName(teamName);
 		return ResponseEntity.ok(teamByName);
@@ -98,11 +100,27 @@ public class TeamLeadController {
 	}
 
 	@PreAuthorize("hasRole('TeamLead')")
-	@DeleteMapping("deleteEmployeeFromTeam/{employeeId}")
+	@DeleteMapping("/deleteEmployeeFromTeam/{employeeId}")
 	public ResponseEntity<String> deleteEmployeeFromTeam(@PathVariable String employeeId) throws Exception {
 		String deleteEmployeeFromTeam = teamLeadService.deleteEmployeeFromTeam(employeeId);
 		return ResponseEntity.ok(deleteEmployeeFromTeam);
 	}
+
+
+	@PreAuthorize("hasRole('TeamLead')")
+	@PutMapping("/updateTeam/{teamName}")
+	public ResponseEntity<Team> updateTeam(@PathVariable String teamName, @RequestBody Team updatedTeam) throws Exception {
+		Team updateTeam = teamLeadService.updateTeam(teamName, updatedTeam);
+		return ResponseEntity.ok(updateTeam);
+	}
+
+	@PreAuthorize("hasRole('TeamLead')")
+	@DeleteMapping("/deleteTeam/{teamName}")
+	public ResponseEntity<String> deleteTeam(@PathVariable String teamName) throws Exception {
+		String deleteTeam = teamLeadService.deleteTeam(teamName);
+		return ResponseEntity.ok(deleteTeam);
+	}
+
 
 }
 

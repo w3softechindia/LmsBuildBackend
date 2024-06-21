@@ -37,7 +37,8 @@ public class EmployeeController {
 		return new ResponseEntity<Employee>(updateEmployeeDetails, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester','TeamLead')")
+
+	@PreAuthorize("hasAnyRole('Developer', 'Tester','TeamLead','Admin')")
 	@PutMapping("/resetPassword/{employeeId}/{currentPassword}/{newPassword}")
 	public ResponseEntity<Employee> resetPassword(@PathVariable String employeeId,@PathVariable String currentPassword,
 		@PathVariable String newPassword) throws Exception {

@@ -24,6 +24,11 @@ public interface TeamLeadService {
 	public Team getTeamByName (String teamName) throws Exception;
 	
 	public String deleteEmployeeFromTeam(String employeeId) throws Exception;
+
+	public Team updateTeam(String teamName,Team updatedTeam) throws Exception;
+	
+	public String deleteTeam(String teamName) throws Exception;
+
 	
 
 }
