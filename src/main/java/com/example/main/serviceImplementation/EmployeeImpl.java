@@ -102,10 +102,6 @@ public class EmployeeImpl implements EmployeeService {
 		return team.getTask();
 	}
 
-	@Override
-	public Course getCourseByCourseName(String courseName) {
-		return courseRepository.findById(courseName).orElse(null);
-    }
 
 }
 
