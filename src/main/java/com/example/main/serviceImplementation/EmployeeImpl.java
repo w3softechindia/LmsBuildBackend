@@ -1,17 +1,21 @@
 package com.example.main.serviceImplementation;
 
-import java.util.Set;
 
+import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.Task;
+import com.example.main.entity.Team;
 import com.example.main.repository.CourseRepository;
 import com.example.main.repository.EmployeeRepository;
+import com.example.main.repository.TaskRepository;
+import com.example.main.repository.TeamRepository;
 import com.example.main.service.EmployeeService;
-
 import com.example.main.entity.SubCourseRepository;
 
 
@@ -20,12 +24,18 @@ public class EmployeeImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private CourseRepository courseRepository;
+
+	@Autowired
+	private TeamRepository teamRepository;
+
+	@Autowired
+	private TaskRepository taskRepository;
 
 	@Override
 	public Employee getEmployeeDetails(String employeeId) throws Exception {
@@ -69,6 +79,27 @@ public class EmployeeImpl implements EmployeeService {
 		Employee employee = employeeRepository.findById(employeeId)
 				.orElseThrow(() -> new Exception("Employee ID not found"));
 		return employee.getTeam().getCourse();
+	}
+
+	@Override
+	public Course getCourseByCourseName(String courseName) {
+		return courseRepository.findById(courseName).orElse(null);
+	}
+
+	@Override
+	public List<Task> assignTasksToTeam(List<Task> tasks, String teamName) {
+
+		Team team = teamRepository.findById(teamName)
+				.orElseThrow(() -> new RuntimeException("Team not found with name: " + teamName));
+		tasks.forEach(task -> task.setTeam(team));
+		return taskRepository.saveAll(tasks);
+	}
+
+	@Override
+	public List<Task> getTasksByEmployeeId(String employeeId) throws Exception {
+		Employee employee = employeeRepository.findById(employeeId).orElseThrow(()-> new Exception("Employee not found...!!!"));
+		Team team = teamRepository.findById(employee.getTeam().getTeamName()).orElseThrow(()-> new Exception("No Team found...!!!"));
+		return team.getTask();
 	}
 
 	@Override

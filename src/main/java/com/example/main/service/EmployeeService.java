@@ -1,9 +1,12 @@
 package com.example.main.service;
 
+
+import java.util.List;
 import java.util.Set;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.Task;
 
 public interface EmployeeService {
 	
@@ -16,5 +19,10 @@ public interface EmployeeService {
 	public Set<Course> getCoursesByEmployeeId(String employeeId) throws Exception;
 	
 	public Course getCourseByCourseName(String courseName);
+	
+	List<Task> assignTasksToTeam(List<Task> tasks, String teamName);
+	
+	public List<Task> getTasksByEmployeeId(String employeeId) throws Exception;
+	
 }
 

@@ -1,19 +1,22 @@
 package com.example.main.controller;
 
-import java.util.Set;
 
+import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.Task;
 import com.example.main.service.EmployeeService;
 
 @RestController
@@ -65,6 +68,21 @@ public class EmployeeController {
 		 Course courseByCourseName = employeeService.getCourseByCourseName(courseName);
 		 return new ResponseEntity<Course>(courseByCourseName,HttpStatus.OK);
 	 }
+	 	 
+	 @PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	 @PostMapping("/assignTasksToTeam/{teamName}")
+	 public ResponseEntity<List<Task>> assignTasksToTeam(@RequestBody List<Task> tasks,@PathVariable String teamName){
+		 List<Task> assignTasksToTeam = employeeService.assignTasksToTeam(tasks, teamName);
+		 return ResponseEntity.ok(assignTasksToTeam);
+	 }
+	 
+	 @PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	 @GetMapping("/getTasksByEmployeeId/{employeeId}")
+	public ResponseEntity<List<Task>> getTasksByEmployeeId(@PathVariable String employeeId) throws Exception{
+		
+		List<Task> tasksByEmployeeId = employeeService.getTasksByEmployeeId(employeeId);
+		 return ResponseEntity.ok(tasksByEmployeeId);
+	}
 
 }
 

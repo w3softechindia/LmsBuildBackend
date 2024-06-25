@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.example.main.entity.Employee;
+import com.example.main.entity.Task;
 
 import jakarta.transaction.Transactional;
 
