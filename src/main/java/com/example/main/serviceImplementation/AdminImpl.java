@@ -144,18 +144,6 @@ Optional<Course> course = courseRepository.findById(courseId);
 
 
 	@Override
-	public Employee getAdmin(String employeeId) throws InvalidAdminId {
-		Optional<Employee> employee = employeeRepository.findById(employeeId);
-		if(employee.isEmpty()) {
-			throw new InvalidAdminId("give Valid AdminId");
-		}else {
-		return employee.get();
-	}
-		
-	}
-
-
-	@Override
 	public Employee updateAdmin(String employeeId, Employee employee) throws InvalidAdminId 
 	{
 //		Employee employee1 = employeeRepository.findById(employeeId).orElseThrow(()->new InvalidAdminId("Give valid AdminId"));
