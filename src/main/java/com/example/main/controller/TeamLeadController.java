@@ -1,5 +1,6 @@
 package com.example.main.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,13 +14,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.main.dto.CourseDto;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.Team;
+import com.example.main.exception.InvalidEmployeeId;
 import com.example.main.service.TeamLeadService;
 
 @RestController
@@ -119,6 +123,20 @@ public class TeamLeadController {
 	public ResponseEntity<String> deleteTeam(@PathVariable String teamName) throws Exception {
 		String deleteTeam = teamLeadService.deleteTeam(teamName);
 		return ResponseEntity.ok(deleteTeam);
+	}
+	
+	@PreAuthorize("hasRole('TeamLead')")
+	@PostMapping("/{employeeId}/uploadProfilePhoto")
+	public ResponseEntity<byte[]> uploadProfilePhoto(@PathVariable String employeeId, @RequestParam("file") MultipartFile file) throws Exception {
+	    System.out.println("Received upload request for employeeId: " + employeeId);
+	    System.out.println("File name: " + file.getOriginalFilename());
+	    try {
+	        byte[] fileContent = teamLeadService.uploadProfilePhoto(employeeId, file);
+	        return ResponseEntity.ok().body(fileContent);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(500).body(null);
+	    }
 	}
 
 

@@ -1,7 +1,6 @@
 package com.example.main.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +29,12 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
+  
 	@Autowired
 	private EmployeeService employeeService;
 
 	private static final String UPLOAD_DIR = "./uploads";
-
+  
 	@PostConstruct
 	public void initRoleAndAdmin() {
 		adminService.initRoleAndAdmin();
@@ -126,7 +126,7 @@ public class AdminController {
 
 	@PreAuthorize("hasRole('Admin')")
 	@PostMapping("/addEmployee/{roleName}")
-	public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee, @PathVariable String roleName) {
+	public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee, @PathVariable String roleName) throws Exception {
 
 		Employee addEmployee = adminService.addEmployee(employee, roleName);
 		return new ResponseEntity<Employee>(addEmployee, HttpStatus.OK);

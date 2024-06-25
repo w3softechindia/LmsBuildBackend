@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.example.main.emailUtil.EmailUtil;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Role;
@@ -35,6 +35,9 @@ public class AdminImpl implements AdminService {
 	
 	@Autowired
 	private CourseRepository courseRepository;
+	
+	@Autowired
+	private EmailUtil emailUtil;
 
 	public String getEncodedPassword(String employeePassword) {
 		return passwordEncoder.encode(employeePassword);
@@ -91,22 +94,57 @@ Optional<Course> course = courseRepository.findById(courseId);
 	}
 
 
+//	@Override
+//	public Employee addEmployee(Employee employee, String roleName) throws Exception {
+//		Role role = roleRepository.findById(roleName).get();
+//		Set<Role> employeeRole = new HashSet<>();
+//		employeeRole.add(role);
+//		employee.setRoles(employeeRole);
+//		String encodedPassword = getEncodedPassword(employee.getEmployeePassword());
+//		employee.setEmployeePassword(encodedPassword);
+//		emailUtil.sendMail(employee.getEmployeeId(), employee.getFirstName(), employee.getLastName(), employee.getWebMail(), employee.getWebMailPassword(), roleName, employee.getPhoneNumber(), employee.getEmployeePassword(), employee.getEmployeeEmail());
+//		return employeeRepository.save(employee);
+//		
+//	}
+
 	@Override
-	public Employee addEmployee(Employee employee, String roleName) {
-		Role role = roleRepository.findById(roleName).get();
-		Set<Role> employeeRole = new HashSet<>();
-		employeeRole.add(role);
-		employee.setRoles(employeeRole);
-		String encodedPassword = getEncodedPassword(employee.getEmployeePassword());
-		employee.setEmployeePassword(encodedPassword);
-		return employeeRepository.save(employee);
+	public Employee addEmployee(Employee employee, String roleName) throws Exception {
+	    Role role = roleRepository.findById(roleName).get();
+	    Set<Role> employeeRole = new HashSet<>();
+	    employeeRole.add(role);
+	    employee.setRoles(employeeRole);
+
+	    // Store the original password before encoding
+	    String originalPassword = employee.getEmployeePassword();
+
+	    // Encode the password and set it to the employee object
+	    String encodedPassword = getEncodedPassword(originalPassword);
+	    employee.setEmployeePassword(encodedPassword);
+
+	    // Send the original password in the email
+	    emailUtil.sendMail(employee.getEmployeeId(), employee.getFirstName(), employee.getLastName(), 
+	        employee.getWebMail(), employee.getWebMailPassword(), roleName, 
+	        employee.getPhoneNumber(), originalPassword, employee.getEmployeeEmail());
+
+	    // Save the employee with the encoded password
+	    return employeeRepository.save(employee);
+	}
+
+	@Override
+	public Employee getAdmin(String employeeId) throws InvalidAdminId {
+		
+		Optional<Employee> employee = employeeRepository.findById(employeeId);
+		if(employee.isEmpty()) {
+			throw new InvalidAdminId("give Valid AdminId");
+		}else {
+		return employee.get();
+	}
 		
 	}
 
 
 	@Override
 	public Employee getAdmin(String employeeId) throws InvalidAdminId {
-		
 		Optional<Employee> employee = employeeRepository.findById(employeeId);
 		if(employee.isEmpty()) {
 			throw new InvalidAdminId("give Valid AdminId");
@@ -163,7 +201,6 @@ Optional<Course> course = courseRepository.findById(courseId);
 
 		    return employeeRepository.save(employee1);
 	}
-
 
 //	@Override
 //	public Employee resetPassword(String employeeId, String currentPassword, String newPassword) throws InvalidAdminId, InvalidPassword {

@@ -42,6 +42,7 @@ public class Employee implements UserDetails{
 	private String employeeEmail;
 	private String employeePassword;
 	private long phoneNumber;
+	private String profilePicture;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "Employee_Roles",joinColumns = {@JoinColumn(name="Employee_Id")},inverseJoinColumns = {@JoinColumn(name="Role_Name")})

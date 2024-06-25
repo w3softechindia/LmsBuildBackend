@@ -1,6 +1,10 @@
 package com.example.main.serviceImplementation;
 
 import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +12,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
@@ -23,6 +28,8 @@ import com.example.main.service.TeamLeadService;
 
 @Service
 public class TeamLeadImplementation implements TeamLeadService {
+
+	private static final String UPLOAD_DIR = "uploads";
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -139,8 +146,7 @@ public class TeamLeadImplementation implements TeamLeadService {
 	}
 
 	@Override
-	public Team updateTeam(String teamName, Team updatedTeam) throws Exception {
-	    
+	public Team updateTeam(String teamName, Team updatedTeam) throws Exception {	    
 	    Team existingTeam = teamRepository.findById(teamName)
 	            .orElseThrow(() -> new ResourceNotFound("Team with name " + teamName + " not found"));
 	    if (updatedTeam.getCourse() != null && !updatedTeam.getCourse().isEmpty()) {
@@ -166,25 +172,41 @@ public class TeamLeadImplementation implements TeamLeadService {
 
 	@Override
 	public String deleteTeam(String teamName) throws Exception {
-	    Team team = teamRepository.findById(teamName)
-	            .orElseThrow(() -> new ResourceNotFound("Team with name " + teamName + " not found"));
+		Team team = teamRepository.findById(teamName)
+				.orElseThrow(() -> new ResourceNotFound("Team with name " + teamName + " not found"));
 
-	  
-	    List<Employee> employees = team.getEmployee();
-	    for (Employee employee : employees) {
-	        employee.setTeam(null);
-	        employeeRepository.save(employee);
-	    }
+		List<Employee> employees = team.getEmployee();
+		for (Employee employee : employees) {
+			employee.setTeam(null);
+			employeeRepository.save(employee);
+		}
 
-	  
-	    Set<Course> courses = team.getCourse();
-	    for (Course course : courses) {
-	        team.getCourse().remove(course);
-	    }	    
-	    teamRepository.delete(team);
-	    return "Team deleted successfully";
+		Set<Course> courses = team.getCourse();
+		for (Course course : courses) {
+			team.getCourse().remove(course);
+		}
+		teamRepository.delete(team);
+		return "Team deleted successfully";
 	}
+
+	 @Override
+	 public byte[] uploadProfilePhoto(String employeeId, MultipartFile file) throws Exception, IOException {
+	        Employee employee = employeeRepository.findById(employeeId)
+	            .orElseThrow(() -> new Exception("Employee not found"));
+
+	        // Generate a file name
+	        String fileName = employeeId + "_" + file.getOriginalFilename();
+	        Path filePath = Paths.get(UPLOAD_DIR, fileName);
+
+	        // Save the file locally
+	        Files.write(filePath, file.getBytes());
+
+	        // Update employee's profile picture path
+	        employee.setProfilePicture(filePath.toString());
+	        employeeRepository.save(employee);
+
+	        return file.getBytes();
+	    }
 
 
 }
-
