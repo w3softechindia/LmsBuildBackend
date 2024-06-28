@@ -137,19 +137,6 @@ public class TeamLeadController {
 		return ResponseEntity.ok(deleteTeam);
 	}
 	
-	@PreAuthorize("hasRole('TeamLead')")
-	@PostMapping("/{employeeId}/uploadProfilePhoto")
-	public ResponseEntity<byte[]> uploadProfilePhoto(@PathVariable String employeeId, @RequestParam("file") MultipartFile file) throws Exception {
-	    System.out.println("Received upload request for employeeId: " + employeeId);
-	    System.out.println("File name: " + file.getOriginalFilename());
-	    try {
-	        byte[] fileContent = teamLeadService.uploadProfilePhoto(employeeId, file);
-	        return ResponseEntity.ok().body(fileContent);
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(500).body(null);
-	    }
-	}
 
 	@PreAuthorize("hasRole('TeamLead')")
 	@GetMapping("/getCourses/{employeeId}")
@@ -187,7 +174,6 @@ public class TeamLeadController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-
 	
 	@PreAuthorize("hasRole('TeamLead')")
 	@PutMapping("/updatePhoto/{employeeId}")
