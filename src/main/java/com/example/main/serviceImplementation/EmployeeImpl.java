@@ -16,8 +16,6 @@ import com.example.main.repository.EmployeeRepository;
 import com.example.main.repository.TaskRepository;
 import com.example.main.repository.TeamRepository;
 import com.example.main.service.EmployeeService;
-import com.example.main.entity.SubCourseRepository;
-
 
 @Service
 public class EmployeeImpl implements EmployeeService {
@@ -102,7 +100,18 @@ public class EmployeeImpl implements EmployeeService {
 		return team.getTask();
 	}
 
+	@Override
+	public Task updateTaskStatus(String taskId, String status) throws Exception {
+		
+		Task task = taskRepository.findById(taskId).orElseThrow(() -> new Exception("Task Id not found..!!"));
+		
+		if (status.equals("Completed") || status.equals("InComplete")) {
+            task.setStatus(status);
+            return taskRepository.save(task);
+        } else {
+            throw new Exception("Only Completed and InComplete allowded");
+        }
+	}
 
 }
-
 

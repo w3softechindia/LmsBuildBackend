@@ -1,6 +1,5 @@
 package com.example.main.service;
 
-
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +22,8 @@ public interface EmployeeService {
 	List<Task> assignTasksToTeam(List<Task> tasks, String teamName);
 	
 	public List<Task> getTasksByEmployeeId(String employeeId) throws Exception;
+	
+	public Task updateTaskStatus(String taskId,String status) throws Exception;
 	
 }
 
