@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -17,7 +18,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,7 +42,10 @@ public class Employee implements UserDetails{
 	private String employeeEmail;
 	private String employeePassword;
 	private long phoneNumber;
-	private String profilePicture;
+	private String imagePath;
+	
+	@Column(name = "image_bytes", columnDefinition = "LONGBLOB")
+	private byte[] imageBytes;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "Employee_Roles",joinColumns = {@JoinColumn(name="Employee_Id")},inverseJoinColumns = {@JoinColumn(name="Role_Name")})

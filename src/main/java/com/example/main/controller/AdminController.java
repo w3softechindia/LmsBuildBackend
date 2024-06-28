@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.exception.InvalidAdminId;
-import com.example.main.exception.InvalidIdException;
 import com.example.main.service.AdminService;
 import com.example.main.service.EmployeeService;
 

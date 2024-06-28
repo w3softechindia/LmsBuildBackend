@@ -51,7 +51,7 @@ public class EmployeeController {
 	}
 	
 
-	 @PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	 @PreAuthorize("hasAnyRole('Developer', 'Tester','TeamLead')")
 	 @GetMapping("/getCoursesByEmployeeId/{employeeId}")
 	    public ResponseEntity<Set<Course>> getCoursesByEmployeeId(@PathVariable String employeeId) {
 	        try {

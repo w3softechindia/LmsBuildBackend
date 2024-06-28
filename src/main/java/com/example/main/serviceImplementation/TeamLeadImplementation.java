@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ import com.example.main.repository.EmployeeRepository;
 import com.example.main.repository.TeamRepository;
 import com.example.main.service.TeamLeadService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class TeamLeadImplementation implements TeamLeadService {
 
@@ -42,6 +45,10 @@ public class TeamLeadImplementation implements TeamLeadService {
 
 	@Autowired
 	private TeamRepository teamRepository;
+
+	@SuppressWarnings("unused")
+	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
+	String uploadDir = "C:\\Users\\chinm\\OneDrive\\Desktop\\LMS_Profile_Picture";
 
 	@Override
 	public Employee getTeamLead(String employeeId) throws Exception {
@@ -110,13 +117,6 @@ public class TeamLeadImplementation implements TeamLeadService {
 		return teamRepository.save(team);
 	}
 
-
-	@Override
-	public List<Course> getAllCourses() throws Exception {
-		List<Course> all = courseRepository.findAll();
-		return all;
-	}
-
 	@Override
 	public List<Team> getAllTeams(String employeeId) throws Exception {
 		return teamRepository.findByTeamLeadId(employeeId);
@@ -146,28 +146,29 @@ public class TeamLeadImplementation implements TeamLeadService {
 	}
 
 	@Override
-	public Team updateTeam(String teamName, Team updatedTeam) throws Exception {	    
-	    Team existingTeam = teamRepository.findById(teamName)
-	            .orElseThrow(() -> new ResourceNotFound("Team with name " + teamName + " not found"));
-	    if (updatedTeam.getCourse() != null && !updatedTeam.getCourse().isEmpty()) {
-	        Course newCourse = updatedTeam.getCourse().iterator().next();
-	        Course foundCourse = courseRepository.findById(newCourse.getCourseName())
-	                .orElseThrow(() -> new ResourceNotFound("Course with name " + newCourse.getCourseName() + " not found"));
-	        Set<Course> updatedCourses = new HashSet<>();
-	        updatedCourses.add(foundCourse);
-	        existingTeam.setCourse(updatedCourses);
-	    }
-	    if (updatedTeam.getEmployee() != null) {
-	        List<Employee> updatedEmployees = new ArrayList<>();
-	        for (Employee emp : updatedTeam.getEmployee()) {
-	            Employee employee = employeeRepository.findById(emp.getEmployeeId()).orElseThrow(() -> new ResourceNotFound("Employee with ID " + emp.getEmployeeId() + " not found"));
-	            updatedEmployees.add(employee);
-	            employee.setTeam(existingTeam);
-	        }
-	        existingTeam.setEmployee(updatedEmployees);
-	    }
+	public Team updateTeam(String teamName, Team updatedTeam) throws Exception {
+		Team existingTeam = teamRepository.findById(teamName)
+				.orElseThrow(() -> new ResourceNotFound("Team with name " + teamName + " not found"));
+		if (updatedTeam.getCourse() != null && !updatedTeam.getCourse().isEmpty()) {
+			Course newCourse = updatedTeam.getCourse().iterator().next();
+			Course foundCourse = courseRepository.findById(newCourse.getCourseName()).orElseThrow(
+					() -> new ResourceNotFound("Course with name " + newCourse.getCourseName() + " not found"));
+			Set<Course> updatedCourses = new HashSet<>();
+			updatedCourses.add(foundCourse);
+			existingTeam.setCourse(updatedCourses);
+		}
+		if (updatedTeam.getEmployee() != null) {
+			List<Employee> updatedEmployees = new ArrayList<>();
+			for (Employee emp : updatedTeam.getEmployee()) {
+				Employee employee = employeeRepository.findById(emp.getEmployeeId()).orElseThrow(
+						() -> new ResourceNotFound("Employee with ID " + emp.getEmployeeId() + " not found"));
+				updatedEmployees.add(employee);
+				employee.setTeam(existingTeam);
+			}
+			existingTeam.setEmployee(updatedEmployees);
+		}
 
-	    return teamRepository.save(existingTeam);
+		return teamRepository.save(existingTeam);
 	}
 
 	@Override
@@ -189,25 +190,109 @@ public class TeamLeadImplementation implements TeamLeadService {
 		return "Team deleted successfully";
 	}
 
-	 @Override
-	 public byte[] uploadProfilePhoto(String employeeId, MultipartFile file) throws Exception, IOException {
-	        Employee employee = employeeRepository.findById(employeeId)
-	            .orElseThrow(() -> new Exception("Employee not found"));
+	@Override
+	public Set<Course> getCourses(String employeeId) throws Exception {
+		List<Team> byTeamLeadId = teamRepository.findByTeamLeadId(employeeId);
+		Set<Course> courses = new HashSet<Course>();
+		for (Team team : byTeamLeadId) {
+			Set<Course> course = team.getCourse();
+			courses.addAll(course);
+		}
+		return courses;
+	}
 
-	        // Generate a file name
-	        String fileName = employeeId + "_" + file.getOriginalFilename();
-	        Path filePath = Paths.get(UPLOAD_DIR, fileName);
+	@Override
+	@Transactional
+	public void uploadPhoto(String employeeId, MultipartFile file) throws Exception {
+		// Generate a unique filename
+		String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
-	        // Save the file locally
-	        Files.write(filePath, file.getBytes());
+		if (file.isEmpty()) {
+			throw new IllegalArgumentException("File is empty");
+		}
 
-	        // Update employee's profile picture path
-	        employee.setProfilePicture(filePath.toString());
-	        employeeRepository.save(employee);
+		// Save the image file to a local directory
 
-	        return file.getBytes();
-	    }
+		Path directoryPath = Paths.get(uploadDir);
+		Files.createDirectories(directoryPath);
 
+		String filePath = Paths.get(uploadDir, uniqueFileName).toString();
+		Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+
+		// Store the image path in the database
+		Employee employee = employeeRepository.findById(employeeId).orElseThrow(()-> new Exception("Employee not found"));
+		;
+		if (employee != null) {
+			employee.setImagePath(filePath);
+			employeeRepository.save(employee);
+		} else {
+			throw new IllegalArgumentException("User with employee id does not exist.");
+		}
+
+	}
+
+	@Override
+	public byte[] getProfilePicture(String employeeId) throws IOException {
+		// Fetch the user entity by email
+		Employee employee = employeeRepository.findByEmployeeId(employeeId)
+;
+		if (employee == null) {
+			throw new IllegalArgumentException("User with employeeId does not exist.");
+		}
+
+		// Get the image path from the user object
+		String imagePath = employee.getImagePath();
+		if (imagePath == null || imagePath.isEmpty()) {
+			throw new IllegalArgumentException("User with employeeId does not have a photo.");
+		}
+
+		// Read the photo bytes from the file
+		Path photoPath = Paths.get(imagePath);
+		return Files.readAllBytes(photoPath);
+	}
+	
+	@Override
+	@Transactional
+	public void updatePhoto(String employeeId, MultipartFile photo) throws Exception {
+		// Fetch the user from the database
+		Employee employee = employeeRepository.findById(employeeId).orElseThrow(()-> new Exception("employee not found"))
+;
+		if (employee != null) {
+			
+			// Delete the old photo from the folder
+			deletePhotoFromFileSystem(employee.getImagePath());
+
+			// Save the new photo to the folder and update the user's photo path in the
+			// database
+			
+			String imagePath = savePhotoToFileSystem(photo);
+			employee.setImagePath(imagePath);
+			employeeRepository.save(employee);
+		} else {
+			throw new IllegalArgumentException("User with employee does not exist.");
+		}
+
+	}
+	private void deletePhotoFromFileSystem(String imagePath) throws IOException {
+		if (imagePath != null) {
+			Path path = Paths.get(imagePath);
+			Files.deleteIfExists(path);
+		}
+	}
+
+	private String savePhotoToFileSystem(MultipartFile photo) throws IOException {
+		// Generate a unique filename for the new photo
+		String fileName = System.currentTimeMillis() + "_" + photo.getOriginalFilename();
+		// Define the upload directory
+		// Create the directory if it doesn't exist
+		Path directoryPath = Paths.get(uploadDir);
+		Files.createDirectories(directoryPath);
+		// Save the photo to the upload directory
+		Path filePath = Paths.get(uploadDir, fileName);
+		Files.write(filePath, photo.getBytes());
+		return filePath.toString();
+	}
+	
+	
 
 }
-

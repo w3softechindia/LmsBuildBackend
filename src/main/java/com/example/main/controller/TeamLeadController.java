@@ -2,9 +2,11 @@ package com.example.main.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -79,13 +81,23 @@ public class TeamLeadController {
 
 	}
 
-	@PreAuthorize("hasRole('TeamLead')")
-	@GetMapping("/getAllCourses")
-	public ResponseEntity<List<Course>> getAllCourses() throws Exception {
-		
-		List<Course> list = teamLeadService.getAllCourses();
-		return ResponseEntity.ok(list);
-	}
+//	@PreAuthorize("hasRole('TeamLead')")
+//	 @GetMapping("/getCoursesByEmployeeId/{employeeId}")
+//    public ResponseEntity<Set<Course>> getCoursesByEmployeeId(@PathVariable String employeeId) {
+//        try {
+//            Set<Course> courses = teamLeadService.getCoursesByEmployeeId(employeeId);
+//            return ResponseEntity.ok(courses);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        }
+//    }
+
+//	@GetMapping("/getAllCourses")
+//	public ResponseEntity<List<Course>> getAllCourses() throws Exception {
+//		
+//		List<Course> list = teamLeadService.getAllCourses();
+//		return ResponseEntity.ok(list);
+//	}
 
 	@PreAuthorize("hasRole('TeamLead')")
 	@GetMapping("/getAllTeams/{employeeId}")
@@ -110,10 +122,10 @@ public class TeamLeadController {
 		return ResponseEntity.ok(deleteEmployeeFromTeam);
 	}
 
-
 	@PreAuthorize("hasRole('TeamLead')")
 	@PutMapping("/updateTeam/{teamName}")
-	public ResponseEntity<Team> updateTeam(@PathVariable String teamName, @RequestBody Team updatedTeam) throws Exception {
+	public ResponseEntity<Team> updateTeam(@PathVariable String teamName, @RequestBody Team updatedTeam)
+			throws Exception {
 		Team updateTeam = teamLeadService.updateTeam(teamName, updatedTeam);
 		return ResponseEntity.ok(updateTeam);
 	}
@@ -139,6 +151,56 @@ public class TeamLeadController {
 	    }
 	}
 
+	@PreAuthorize("hasRole('TeamLead')")
+	@GetMapping("/getCourses/{employeeId}")
+	public ResponseEntity<Set<Course>> getCourses(@PathVariable String employeeId) throws Exception {
+		Set<Course> course = teamLeadService.getCourses(employeeId);
+		return ResponseEntity.ok(course);
+	}
 
+	@PreAuthorize("hasRole('TeamLead')")
+	@PostMapping("/uploadPhoto/{employeeId}")
+	public ResponseEntity<String> uploadPhoto(@PathVariable String employeeId, @RequestParam("file") MultipartFile file) throws Exception {
+		try {
+			teamLeadService.uploadPhoto(employeeId, file);
+			return ResponseEntity.ok("Photo uploaded successfully for user with employeeId ");
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error uploading photo: " + e.getMessage());
+		}
+	}
+	
+	@PreAuthorize("hasRole('TeamLead')")
+	@GetMapping("/getPhoto/{employeeId}")
+	public ResponseEntity<ByteArrayResource> getPhoto(@PathVariable String employeeId) {
+		try {
+			// Get the photo bytes for the given email
+			byte[] photoBytes = teamLeadService.getProfilePicture(employeeId);
+
+			// Create a ByteArrayResource from the photo bytes
+			ByteArrayResource resource = new ByteArrayResource(photoBytes);
+			// Return ResponseEntity with the resource
+			return ResponseEntity.ok().header("Content-Type", "image/jpeg").body(resource);
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	
+	@PreAuthorize("hasRole('TeamLead')")
+	@PutMapping("/updatePhoto/{employeeId}")
+	public ResponseEntity<?> updatePhoto(@PathVariable String employeeId, @RequestParam("photo") MultipartFile photo) throws Exception {
+		try {
+			teamLeadService.updatePhoto(employeeId, photo);
+			return ResponseEntity.ok().build(); // Return 200 OK if photo is updated successfully
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build(); // Return 400 Bad Request if photo is empty or user does not
+														// exist
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Return 500 Internal Server Error
+																					// for other IO exceptions
+		}
+	}
 }
-
