@@ -48,7 +48,7 @@ public class TeamLeadImplementation implements TeamLeadService {
 
 	@SuppressWarnings("unused")
 	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
-	String uploadDir = "C:\\Users\\chinm\\OneDrive\\Desktop\\LMS_Profile_Picture";
+	String uploadDir = "C:\\Users\\HP\\OneDrive\\Desktop\\Lms_Picture";
 
 	@Override
 	public Employee getTeamLead(String employeeId) throws Exception {
