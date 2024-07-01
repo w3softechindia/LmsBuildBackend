@@ -176,7 +176,7 @@ public class TeamLeadController {
 		}
 	}
 	
-	@PreAuthorize("hasRole('TeamLead')")
+	@PreAuthorize("hasRole('TeamLead','Developer','Tester','Admin')")
 	@PutMapping("/updatePhoto/{employeeId}")
 	public ResponseEntity<?> updatePhoto(@PathVariable String employeeId, @RequestParam("photo") MultipartFile photo) throws Exception {
 		try {
