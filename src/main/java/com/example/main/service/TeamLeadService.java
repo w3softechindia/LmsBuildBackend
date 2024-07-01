@@ -27,6 +27,8 @@ public interface TeamLeadService {
 	
 	public Set<Course> getCourses(String employeeId) throws Exception;
 	
+	public List<Course> getAllCourses() throws Exception;
+	
 	public Team getTeamByName (String teamName) throws Exception;
 	
 	public String deleteEmployeeFromTeam(String employeeId) throws Exception;

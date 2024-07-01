@@ -92,12 +92,12 @@ public class TeamLeadController {
 //        }
 //    }
 
-//	@GetMapping("/getAllCourses")
-//	public ResponseEntity<List<Course>> getAllCourses() throws Exception {
-//		
-//		List<Course> list = teamLeadService.getAllCourses();
-//		return ResponseEntity.ok(list);
-//	}
+	@GetMapping("/getAllCourses")
+	public ResponseEntity<List<Course>> getAllCourses() throws Exception {
+		
+		List<Course> list = teamLeadService.getAllCourses();
+		return ResponseEntity.ok(list);
+	}
 
 	@PreAuthorize("hasRole('TeamLead')")
 	@GetMapping("/getAllTeams/{employeeId}")

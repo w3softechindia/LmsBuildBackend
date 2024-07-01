@@ -230,6 +230,12 @@ public class TeamLeadImplementation implements TeamLeadService {
 		}
 
 	}
+	
+	@Override
+	public List<Course> getAllCourses() throws Exception {
+		List<Course> all = courseRepository.findAll();
+		return all;
+	}
 
 	@Override
 	public byte[] getProfilePicture(String employeeId) throws IOException {
