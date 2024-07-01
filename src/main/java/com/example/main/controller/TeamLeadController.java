@@ -92,6 +92,7 @@ public class TeamLeadController {
 //        }
 //    }
 
+	@PreAuthorize("hasRole('TeamLead')")
 	@GetMapping("/getAllCourses")
 	public ResponseEntity<List<Course>> getAllCourses() throws Exception {
 		
