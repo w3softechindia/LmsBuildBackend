@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Task;
+import com.example.main.repository.CourseRepository;
 import com.example.main.service.EmployeeService;
 
 @RestController
@@ -88,5 +89,11 @@ public class EmployeeController {
 
 		Task updateTaskStatus = employeeService.updateTaskStatus(taskId, status);
 		return new ResponseEntity<Task>(updateTaskStatus, HttpStatus.OK);
+	}
+	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PutMapping("/updateCourseProgress/{courseName}/{progress}")
+	public ResponseEntity<Course> updateCourseProgress(@PathVariable String courseName, @PathVariable int progress) {
+		Course updateCourseProgress = employeeService.updateCourseProgress(courseName, progress);
+		return new ResponseEntity<Course>(updateCourseProgress, HttpStatus.OK);
 	}
 }

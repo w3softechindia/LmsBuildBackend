@@ -1,6 +1,5 @@
 package com.example.main.serviceImplementation;
 
-
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,14 +94,16 @@ public class EmployeeImpl implements EmployeeService {
 
 	@Override
 	public List<Task> getTasksByEmployeeId(String employeeId) throws Exception {
-		Employee employee = employeeRepository.findById(employeeId).orElseThrow(()-> new Exception("Employee not found...!!!"));
-		Team team = teamRepository.findById(employee.getTeam().getTeamName()).orElseThrow(()-> new Exception("No Team found...!!!"));
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new Exception("Employee not found...!!!"));
+		Team team = teamRepository.findById(employee.getTeam().getTeamName())
+				.orElseThrow(() -> new Exception("No Team found...!!!"));
 		return team.getTask();
 	}
 
 	@Override
 	public Task updateTaskStatus(String taskId, String status) throws Exception {
-		
+    
 		Task task = taskRepository.findById(taskId).orElseThrow(() -> new Exception("Task Id not found..!!"));
 		
 		if (status.equals("Completed") || status.equals("InComplete")) {
@@ -112,6 +113,30 @@ public class EmployeeImpl implements EmployeeService {
             throw new Exception("Only Completed and InComplete allowded");
         }
 	}
+  
+	@Override
+	public Course updateCourseProgress(String courseName, int progress) {
 
+		Course course = courseRepository.findById(courseName)
+				.orElseThrow(() -> new RuntimeException("Course not found"));
+
+		int newProgress = Math.min(progress, 100);
+		course.setProgress(newProgress); 
+
+		if (newProgress == 100) {
+			
+			List<Course> allCourses = courseRepository.findAll();
+			for (int i = 0; i < allCourses.size(); i++) {
+				if (allCourses.get(i).getCourseName().equals(courseName) && i < allCourses.size() - 1) {
+					Course nextCourse = allCourses.get(i + 1);
+					nextCourse.setProgress(Math.min(nextCourse.getProgress() + 20, 100));
+					courseRepository.save(nextCourse);
+					break;
+				}
+			}
+
+		}
+		return courseRepository.save(course);
+
+	}
 }
-
