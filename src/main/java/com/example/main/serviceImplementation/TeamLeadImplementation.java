@@ -32,8 +32,6 @@ import jakarta.transaction.Transactional;
 @Service
 public class TeamLeadImplementation implements TeamLeadService {
 
-	private static final String UPLOAD_DIR = "uploads";
-
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
@@ -48,7 +46,7 @@ public class TeamLeadImplementation implements TeamLeadService {
 
 	@SuppressWarnings("unused")
 	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
-	String uploadDir = "E:\\LMS_Backup_Folder\\Lms_Picture";
+	String uploadDir = "C:\\Users\\chinm\\OneDrive\\Desktop\\LMS_Profile_Picture";
 
 	@Override
 	public Employee getTeamLead(String employeeId) throws Exception {
@@ -230,12 +228,6 @@ public class TeamLeadImplementation implements TeamLeadService {
 		}
 
 	}
-	
-	@Override
-	public List<Course> getAllCourses() throws Exception {
-		List<Course> all = courseRepository.findAll();
-		return all;
-	}
 
 	@Override
 	public byte[] getProfilePicture(String employeeId) throws IOException {
@@ -298,8 +290,12 @@ public class TeamLeadImplementation implements TeamLeadService {
 		Files.write(filePath, photo.getBytes());
 		return filePath.toString();
 	}
-	
+
+	@Override
+	public List<Course> getAllCourses() throws Exception {
+		List<Course> all = courseRepository.findAll();
+		return all;
+	}
 	
 
 }
-
