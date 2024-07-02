@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Task;
-import com.example.main.repository.CourseRepository;
 import com.example.main.service.EmployeeService;
 
 @RestController
@@ -97,4 +95,5 @@ public class EmployeeController {
 		Course updateCourseProgress = employeeService.updateCourseProgress(courseName, progress);
 		return new ResponseEntity<Course>(updateCourseProgress, HttpStatus.OK);
 	}
+	
 }
