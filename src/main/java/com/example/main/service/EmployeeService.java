@@ -3,6 +3,7 @@ package com.example.main.service;
 import java.util.List;
 import java.util.Set;
 
+
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Task;
@@ -26,6 +27,6 @@ public interface EmployeeService {
 	public Task updateTaskStatus(String taskId,String status) throws Exception;
 	
 	public Course updateCourseProgress(String courseName, int progress);
-
+	
 }
 

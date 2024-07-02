@@ -5,7 +5,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Task;
@@ -33,6 +32,10 @@ public class EmployeeImpl implements EmployeeService {
 
 	@Autowired
 	private TaskRepository taskRepository;
+
+//	@SuppressWarnings("unused")
+//	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
+//	String uploadDir = "E:\\LMS_Backup_Folder\\Lms_Picture";
 
 	@Override
 	public Employee getEmployeeDetails(String employeeId) throws Exception {
@@ -103,17 +106,17 @@ public class EmployeeImpl implements EmployeeService {
 
 	@Override
 	public Task updateTaskStatus(String taskId, String status) throws Exception {
-    
+
 		Task task = taskRepository.findById(taskId).orElseThrow(() -> new Exception("Task Id not found..!!"));
-		
+
 		if (status.equals("Completed") || status.equals("InComplete")) {
-            task.setStatus(status);
-            return taskRepository.save(task);
-        } else {
-            throw new Exception("Only Completed and InComplete allowded");
-        }
+			task.setStatus(status);
+			return taskRepository.save(task);
+		} else {
+			throw new Exception("Only Completed and InComplete allowded");
+		}
 	}
-  
+
 	@Override
 	public Course updateCourseProgress(String courseName, int progress) {
 
@@ -121,10 +124,10 @@ public class EmployeeImpl implements EmployeeService {
 				.orElseThrow(() -> new RuntimeException("Course not found"));
 
 		int newProgress = Math.min(progress, 100);
-		course.setProgress(newProgress); 
+		course.setProgress(newProgress);
 
 		if (newProgress == 100) {
-			
+
 			List<Course> allCourses = courseRepository.findAll();
 			for (int i = 0; i < allCourses.size(); i++) {
 				if (allCourses.get(i).getCourseName().equals(courseName) && i < allCourses.size() - 1) {
@@ -139,4 +142,5 @@ public class EmployeeImpl implements EmployeeService {
 		return courseRepository.save(course);
 
 	}
+
 }

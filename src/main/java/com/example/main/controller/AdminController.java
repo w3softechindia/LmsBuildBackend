@@ -29,9 +29,6 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
   
-	@Autowired
-	private EmployeeService employeeService;
-
 	private static final String UPLOAD_DIR = "./uploads";
   
 	@PostConstruct
