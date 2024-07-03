@@ -42,6 +42,10 @@ public class EmployeeImpl implements EmployeeService {
 //	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
 //	String uploadDir = "E:\\LMS_Backup_Folder\\Lms_Picture";
 
+//	@SuppressWarnings("unused")
+//	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
+//	String uploadDir = "E:\\LMS_Backup_Folder\\Lms_Picture";
+
 	@Override
 	public Employee getEmployeeDetails(String employeeId) throws Exception {
 

@@ -98,13 +98,11 @@ public class EmployeeController {
 		Course updateCourseProgress = employeeService.updateCourseProgress(courseName, progress);
 		return new ResponseEntity<Course>(updateCourseProgress, HttpStatus.OK);
 	}
-	
-	
+  
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getMeetingLinkByTeamName/{teamName}")
 	public ResponseEntity<String> getMeetingLinkByTeamName(@PathVariable String teamName) throws Exception{
 		String meetingLinkByTeamName = employeeService.getMeetingLinkByTeamName(teamName);
 		return new ResponseEntity<String>(meetingLinkByTeamName,HttpStatus.OK);
 	}
-	
 }
