@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.SubCourse;
+import com.example.main.entity.SubCourseRepository;
 import com.example.main.entity.Task;
 import com.example.main.entity.Team;
 import com.example.main.repository.CourseRepository;
@@ -32,6 +34,9 @@ public class EmployeeImpl implements EmployeeService {
 
 	@Autowired
 	private TaskRepository taskRepository;
+	
+	@Autowired
+	private SubCourseRepository subCourseRepository;
 
 //	@SuppressWarnings("unused")
 //	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
@@ -143,4 +148,14 @@ public class EmployeeImpl implements EmployeeService {
 
 	}
 
+	@Override
+	public String getMeetingLinkByTeamName(String teamName) throws Exception {
+		
+		Team team = teamRepository.findById(teamName).orElseThrow(() -> new Exception("Team Name not found"));
+    if (team != null) {
+        return team.getMeetingLink();
+    }
+	return null;
+	}
 }
+	

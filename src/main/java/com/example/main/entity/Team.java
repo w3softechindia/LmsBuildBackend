@@ -25,6 +25,8 @@ public class Team {
 	private String teamName;
 
 	private String teamLeadId;
+	
+	private String meetingLink;
   
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
 	@JsonManagedReference

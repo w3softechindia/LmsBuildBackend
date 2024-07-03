@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
 import com.example.main.service.EmployeeService;
 
@@ -89,11 +91,20 @@ public class EmployeeController {
 		Task updateTaskStatus = employeeService.updateTaskStatus(taskId, status);
 		return new ResponseEntity<Task>(updateTaskStatus, HttpStatus.OK);
 	}
+
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@PutMapping("/updateCourseProgress/{courseName}/{progress}")
 	public ResponseEntity<Course> updateCourseProgress(@PathVariable String courseName, @PathVariable int progress) {
 		Course updateCourseProgress = employeeService.updateCourseProgress(courseName, progress);
 		return new ResponseEntity<Course>(updateCourseProgress, HttpStatus.OK);
+	}
+	
+	
+	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@GetMapping("/getMeetingLinkByTeamName/{teamName}")
+	public ResponseEntity<String> getMeetingLinkByTeamName(@PathVariable String teamName) throws Exception{
+		String meetingLinkByTeamName = employeeService.getMeetingLinkByTeamName(teamName);
+		return new ResponseEntity<String>(meetingLinkByTeamName,HttpStatus.OK);
 	}
 	
 }
