@@ -27,6 +27,7 @@ public interface EmployeeService {
 	public Task updateTaskStatus(String taskId,String status) throws Exception;
 	
 	public Course updateCourseProgress(String courseName, int progress);
-	
+  
+	public String getMeetingLinkByTeamName(String teamName) throws Exception;
 }
 
