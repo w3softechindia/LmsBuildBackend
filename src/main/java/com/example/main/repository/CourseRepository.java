@@ -7,5 +7,6 @@ import com.example.main.entity.Course;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, String> {
+	
 
 }

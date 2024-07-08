@@ -95,7 +95,7 @@ public class TeamLeadController {
 	@PreAuthorize("hasRole('TeamLead')")
 	@GetMapping("/getAllCourses")
 	public ResponseEntity<List<Course>> getAllCourses() throws Exception {
-		
+
 		List<Course> list = teamLeadService.getAllCourses();
 		return ResponseEntity.ok(list);
 	}
@@ -137,7 +137,6 @@ public class TeamLeadController {
 		String deleteTeam = teamLeadService.deleteTeam(teamName);
 		return ResponseEntity.ok(deleteTeam);
 	}
-	
 
 	@PreAuthorize("hasRole('TeamLead')")
 	@GetMapping("/getCourses/{employeeId}")
@@ -148,7 +147,8 @@ public class TeamLeadController {
 
 	@PreAuthorize("hasAnyRole('ROLE_TeamLead', 'ROLE_Developer', 'ROLE_Tester')")
 	@PostMapping("/uploadPhoto/{employeeId}")
-	public ResponseEntity<String> uploadPhoto(@PathVariable String employeeId, @RequestParam("file") MultipartFile file) throws Exception {
+	public ResponseEntity<String> uploadPhoto(@PathVariable String employeeId, @RequestParam("file") MultipartFile file)
+			throws Exception {
 		try {
 			teamLeadService.uploadPhoto(employeeId, file);
 			return ResponseEntity.ok("Photo uploaded successfully for user with employeeId ");
@@ -157,7 +157,7 @@ public class TeamLeadController {
 					.body("Error uploading photo: " + e.getMessage());
 		}
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ROLE_TeamLead', 'ROLE_Developer', 'ROLE_Tester')")
 	@GetMapping("/getPhoto/{employeeId}")
 	public ResponseEntity<ByteArrayResource> getPhoto(@PathVariable String employeeId) {
@@ -175,10 +175,11 @@ public class TeamLeadController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ROLE_TeamLead', 'ROLE_Developer', 'ROLE_Tester')")
 	@PutMapping("/updatePhoto/{employeeId}")
-	public ResponseEntity<?> updatePhoto(@PathVariable String employeeId, @RequestParam("photo") MultipartFile photo) throws Exception {
+	public ResponseEntity<?> updatePhoto(@PathVariable String employeeId, @RequestParam("photo") MultipartFile photo)
+			throws Exception {
 		try {
 			teamLeadService.updatePhoto(employeeId, photo);
 			return ResponseEntity.ok().build(); // Return 200 OK if photo is updated successfully
@@ -190,4 +191,12 @@ public class TeamLeadController {
 																					// for other IO exceptions
 		}
 	}
+
+	@PreAuthorize("hasRole('TeamLead')")
+	@GetMapping("/getTotalTeamsByTeamLead/{employeeId}")
+	 public ResponseEntity<Long> getTotalTeamsByTeamLead(@PathVariable String employeeId) {
+        long totalTeams = teamLeadService.getTotalTeamsByTeamLead(employeeId);
+        return ResponseEntity.ok(totalTeams);
+    }
+
 }
