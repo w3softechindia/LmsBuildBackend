@@ -3,9 +3,9 @@ package com.example.main.service;
 import java.util.List;
 import java.util.Set;
 
-
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
 
 public interface EmployeeService {
@@ -29,5 +29,7 @@ public interface EmployeeService {
 	public Course updateCourseProgress(String courseName, int progress);
   
 	public String getMeetingLinkByTeamName(String teamName) throws Exception;
+	
+	public SubCourse getSubCourseBySubName(String subCourseName);
 }
 

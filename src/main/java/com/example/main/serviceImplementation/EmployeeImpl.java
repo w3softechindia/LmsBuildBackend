@@ -161,5 +161,10 @@ public class EmployeeImpl implements EmployeeService {
     }
 	return null;
 	}
+
+	@Override
+	public SubCourse getSubCourseBySubName(String subCourseName) {
+		return subCourseRepository.findById(subCourseName).orElse(null);	
+	}
 }
 	

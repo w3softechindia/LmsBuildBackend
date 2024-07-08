@@ -105,4 +105,11 @@ public class EmployeeController {
 		String meetingLinkByTeamName = employeeService.getMeetingLinkByTeamName(teamName);
 		return new ResponseEntity<String>(meetingLinkByTeamName,HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@GetMapping("/getSubCourseBySubName/{subCourseName}")
+	public ResponseEntity<SubCourse> getSubCourseBySubName(@PathVariable String subCourseName) {
+		SubCourse courseByCourseName = employeeService.getSubCourseBySubName(subCourseName);
+		return new ResponseEntity<SubCourse>(courseByCourseName, HttpStatus.OK);
+	}
 }
