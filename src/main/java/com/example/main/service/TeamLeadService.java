@@ -40,4 +40,6 @@ public interface TeamLeadService {
 	byte[] getProfilePicture(String employeeId) throws IOException;
 	
 	public void updatePhoto(String employeeId, MultipartFile photo) throws IOException, Exception;
+	
+	public long getTotalTeamsByTeamLead(String employeeId);
 }

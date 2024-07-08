@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -218,7 +219,8 @@ public class TeamLeadImplementation implements TeamLeadService {
 		Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
 
 		// Store the image path in the database
-		Employee employee = employeeRepository.findById(employeeId).orElseThrow(()-> new Exception("Employee not found"));
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new Exception("Employee not found"));
 		;
 		if (employee != null) {
 			employee.setImagePath(filePath);
@@ -232,8 +234,7 @@ public class TeamLeadImplementation implements TeamLeadService {
 	@Override
 	public byte[] getProfilePicture(String employeeId) throws IOException {
 		// Fetch the user entity by email
-		Employee employee = employeeRepository.findByEmployeeId(employeeId)
-;
+		Employee employee = employeeRepository.findByEmployeeId(employeeId);
 		if (employee == null) {
 			throw new IllegalArgumentException("User with employeeId does not exist.");
 		}
@@ -248,21 +249,21 @@ public class TeamLeadImplementation implements TeamLeadService {
 		Path photoPath = Paths.get(imagePath);
 		return Files.readAllBytes(photoPath);
 	}
-	
+
 	@Override
 	@Transactional
 	public void updatePhoto(String employeeId, MultipartFile photo) throws Exception {
 		// Fetch the user from the database
-		Employee employee = employeeRepository.findById(employeeId).orElseThrow(()-> new Exception("employee not found"))
-;
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new Exception("employee not found"));
 		if (employee != null) {
-			
+
 			// Delete the old photo from the folder
 			deletePhotoFromFileSystem(employee.getImagePath());
 
 			// Save the new photo to the folder and update the user's photo path in the
 			// database
-			
+
 			String imagePath = savePhotoToFileSystem(photo);
 			employee.setImagePath(imagePath);
 			employeeRepository.save(employee);
@@ -271,6 +272,7 @@ public class TeamLeadImplementation implements TeamLeadService {
 		}
 
 	}
+
 	private void deletePhotoFromFileSystem(String imagePath) throws IOException {
 		if (imagePath != null) {
 			Path path = Paths.get(imagePath);
@@ -296,6 +298,12 @@ public class TeamLeadImplementation implements TeamLeadService {
 		List<Course> all = courseRepository.findAll();
 		return all;
 	}
-	
+
+
+	@Override
+	public long getTotalTeamsByTeamLead(String employeeId) {
+		List<Team> teamLeadId = teamRepository.findByTeamLeadId(employeeId);
+		return teamLeadId.size();
+	}
 
 }
