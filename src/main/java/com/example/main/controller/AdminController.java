@@ -1,7 +1,10 @@
 package com.example.main.controller;
 
+import java.io.IOException;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,12 +16,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.Team;
 import com.example.main.exception.InvalidAdminId;
+import com.example.main.exception.InvalidIdException;
 import com.example.main.service.AdminService;
-import com.example.main.service.EmployeeService;
 
 import jakarta.annotation.PostConstruct;
 
@@ -29,8 +34,7 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
   
-	private static final String UPLOAD_DIR = "./uploads";
-  
+	
 	@PostConstruct
 	public void initRoleAndAdmin() {
 		adminService.initRoleAndAdmin();
@@ -150,13 +154,87 @@ public class AdminController {
 
 	}
 
-//	@PreAuthorize("hasRole('Admin')")
-//	@PutMapping("/resetPassword/{employeeId}/{currentPassword}/{newPassword}")
-//	public  void resetPassword(@PathVariable String employeeId,@PathVariable String currentPassword,
-//			@PathVariable String newPassword) throws InvalidAdminId, InvalidPassword {
-//
-//	 adminService.resetPassword(employeeId, currentPassword, newPassword);
-//		
-//	}
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/employeesNumber/byRole/{roleName}")
+	public ResponseEntity<Integer> getEmployeesNoByRole(@PathVariable String roleName) {
+		int  employees = adminService.getEmployeesNoByRole(roleName);
+		return ResponseEntity.ok(employees);
+	}
+@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/getTotalCourses")
+	public ResponseEntity<Integer> getTotalCourses() {
+		int courses = adminService.getTotalCourses();
+		return new ResponseEntity<Integer>(courses, HttpStatus.OK);
+	}
+  @PreAuthorize("hasRole('Admin')")
+    @PutMapping("/updateEmployeeStatus/{employeeId}")
+    public ResponseEntity<String> updateEmployeeStatus(@PathVariable String employeeId, @RequestBody String status)
+            throws InvalidAdminId, InvalidIdException {
+        try {
+            String result = adminService.updateEmployeeStatus(employeeId, status);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (InvalidAdminId | InvalidIdException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred while updating employee status.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/getAllTeam")
+	public ResponseEntity<List<Team>> getAllTeams() {
+		List<Team> teams = adminService.getAllTeams();
+		return ResponseEntity.ok(teams);
+
+	}
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/getTotalTeams")
+	public ResponseEntity<Integer> getTotalTeams() {
+		int teams = adminService.getTotalTeams();
+		return ResponseEntity.ok(teams);
+
+	}
+@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/employeesAfterStatus/notAdmin")
+	public ResponseEntity<List<Employee>> getEmployeesNotAdminAfterStatus() {
+		List<Employee> employees = adminService.getEmployeesNotAdminAfterStatus();
+		return ResponseEntity.ok(employees);
+
+	}
+@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/employeesAfterStatus/byRole")
+	public ResponseEntity<List<Employee>> getEmployeesByRoleAfterStatus(@RequestParam String roleName) {
+		List<Employee> employees = adminService.getEmployeesByRoleAfterStatus(roleName);
+		return ResponseEntity.ok(employees);
+	}
+@PreAuthorize("hasRole('Admin')")
+	@PostMapping("/uploadPhotoAdmin/{employeeId}")
+	public ResponseEntity<String> uploadPhoto(@PathVariable String employeeId, @RequestParam("file") MultipartFile file) throws Exception {
+		try {
+		adminService.uploadPhoto(employeeId, file);
+			return ResponseEntity.ok("Photo uploaded successfully for user with employeeId ");
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error uploading photo: " + e.getMessage());
+		}
+	}
+	
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/getPhotoAdmin/{employeeId}")
+	public ResponseEntity<ByteArrayResource> getPhoto(@PathVariable String employeeId) {
+		try {
+			// Get the photo bytes for the given email
+			byte[] photoBytes = adminService.getProfilePicture(employeeId);
+
+			// Create a ByteArrayResource from the photo bytes
+			ByteArrayResource resource = new ByteArrayResource(photoBytes);
+			// Return ResponseEntity with the resource
+			return ResponseEntity.ok().header("Content-Type", "image/jpeg").body(resource);
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
 
 }

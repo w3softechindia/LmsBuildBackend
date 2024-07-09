@@ -21,4 +21,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 	void deleteByTeamTeamName(@Param("teamName") String teamName);
 
 	List<Employee> findByRolesRoleNameNot(String roleName);
+
+
+	List<Employee> findByStatus(String status);
+
+    List<Employee> findByRoles_RoleNameAndStatus(String roleName, String status);
+   
+    List<Employee> findByRoles_RoleNameNotAndStatus(String roleName, String status);
+  
 }

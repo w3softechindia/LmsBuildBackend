@@ -62,7 +62,7 @@ public class EmployeeController {
 		}
 	}
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PreAuthorize("hasAnyRole('Developer', 'Tester','Admin')")
 	@GetMapping("/getCourseByCourseName/{courseName}")
 	public ResponseEntity<Course> getCourseByCourseName(@PathVariable String courseName) {
 		Course courseByCourseName = employeeService.getCourseByCourseName(courseName);
@@ -106,7 +106,6 @@ public class EmployeeController {
 		String meetingLinkByTeamName = employeeService.getMeetingLinkByTeamName(teamName);
 		return new ResponseEntity<String>(meetingLinkByTeamName, HttpStatus.OK);
 	}
-
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getSubCourseBySubName/{subCourseName}")
 	public ResponseEntity<SubCourse> getSubCourseBySubName(@PathVariable String subCourseName) {

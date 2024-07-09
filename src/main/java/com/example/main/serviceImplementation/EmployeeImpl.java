@@ -194,4 +194,9 @@ public class EmployeeImpl implements EmployeeService {
 			throw new Exception("Only 'Completed' and 'InComplete' statuses are allowed");
 		}
 	}
+
+	@Override
+	public SubCourse getSubCourseBySubName(String subCourseName) {
+		return subCourseRepository.findById(subCourseName).orElse(null);	
+	}
 }

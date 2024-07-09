@@ -1,25 +1,38 @@
 package com.example.main.serviceImplementation;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.main.emailUtil.EmailUtil;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Role;
+import com.example.main.entity.Team;
 import com.example.main.exception.InvalidAdminId;
 import com.example.main.exception.InvalidIdException;
 import com.example.main.repository.CourseRepository;
 import com.example.main.repository.EmployeeRepository;
 import com.example.main.repository.RoleRepository;
+import com.example.main.repository.TeamRepository;
 import com.example.main.service.AdminService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AdminImpl implements AdminService {
@@ -38,11 +51,22 @@ public class AdminImpl implements AdminService {
 	
 	@Autowired
 	private EmailUtil emailUtil;
+	
+	@Autowired
+	private TeamRepository teamRepository;
 
 	public String getEncodedPassword(String employeePassword) {
 		return passwordEncoder.encode(employeePassword);
 	}
 
+	@SuppressWarnings("unused")
+	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
+	String uploadDir = "C:\\Users\\HP\\OneDrive\\Desktop\\Lms_Picture";
+	
+
+	public void sortEmployeesDescending(List<Employee> employees) {
+		Collections.sort(employees, Comparator.comparing(Employee::getDateOfJoin).reversed());
+	}
 	
 	@Override
 	public String initRoleAndAdmin() {
@@ -238,9 +262,162 @@ Optional<Course> course = courseRepository.findById(courseId);
 		return list;
 		}
 	    	
+		
+
+		@Override
+		public int getEmployeesNoByRole(String roleName) {
+			List<Employee> filteredEmployees = employeeRepository.findAll().stream()
+					.filter(emp -> emp.getRoles().stream().anyMatch(role -> role.getRoleName().equalsIgnoreCase(roleName)))
+					.collect(Collectors.toList());
+			return filteredEmployees.size();
+		}
+
+		@Override
+		public int getTotalCourses() {
+			List<Course> list = courseRepository.findAll();
+			return list.size();
+		}
+
+		@Override
+		public String updateEmployeeStatus(String employeeId, String status) throws InvalidIdException {
+			Employee employee = employeeRepository.findById(employeeId)
+					.orElseThrow(() -> new InvalidIdException("Give valid EmployeeId"));
+			if (status != null) {
+				employee.setStatus(status);
+			}
+			employeeRepository.save(employee);
+			return "status is updated to " + status + " successfully";
+
+		}
+
+		@Override
+		public List<Team> getAllTeams() {
+
+			List<Team> list = teamRepository.findAll();
+
+			return list;
+		}
+
+		@Override
+		public int getTotalTeams() {
+			List<Team> allTeams = getAllTeams();
+			return allTeams.size();
+		}
+
+		@Override
+		public List<Employee> getEmployeesByRoleAfterStatus(String roleName) {
+			List<Employee> byRoles_RoleNameAndStatus = employeeRepository.findByRoles_RoleNameAndStatus(roleName,
+					"Approved");
+			return byRoles_RoleNameAndStatus;
+		}
+
+		@Override
+		public List<Employee> getEmployeesNotAdminAfterStatus() {
+			List<Employee> list = employeeRepository.findByStatus("Approved");
+//			List<Employee> list = employeeRepository.findByRoles_RoleNameNotAndStatus("Admin","Approved");
+			Collections.sort(list, (e1, e2) -> e1.getDateOfJoin().compareTo(e2.getDateOfJoin()));
+			sortEmployeesDescending(list);
+			return list;
+		}
+
+		@Override
+		public byte[] getProfilePicture(String employeeId) throws IOException {
+			// Fetch the user entity by email
+			Employee employee = employeeRepository.findByEmployeeId(employeeId);
+			if (employee == null) {
+				throw new IllegalArgumentException("User with employeeId does not exist.");
+			}
+
+			// Get the image path from the user object
+			String imagePath = employee.getImagePath();
+			if (imagePath == null || imagePath.isEmpty()) {
+				throw new IllegalArgumentException("User with employeeId does not have a photo.");
+			}
+
+			// Read the photo bytes from the file
+			Path photoPath = Paths.get(imagePath);
+			return Files.readAllBytes(photoPath);
+		}
+
+		@Override
+		@Transactional
+		public void updatePhoto(String employeeId, MultipartFile photo) throws Exception {
+			// Fetch the user from the database
+			Employee employee = employeeRepository.findById(employeeId)
+					.orElseThrow(() -> new Exception("employee not found"));
+			if (employee != null) {
+
+				// Delete the old photo from the folder
+				deletePhotoFromFileSystem(employee.getImagePath());
+
+				// Save the new photo to the folder and update the user's photo path in the
+				// database
+
+				String imagePath = savePhotoToFileSystem(photo);
+				employee.setImagePath(imagePath);
+				employeeRepository.save(employee);
+			} else {
+				throw new IllegalArgumentException("User with employee does not exist.");
+			}
+
+		}
+
+		private void deletePhotoFromFileSystem(String imagePath) throws IOException {
+			if (imagePath != null) {
+				Path path = Paths.get(imagePath);
+				Files.deleteIfExists(path);
+			}
+		}
+
+		private String savePhotoToFileSystem(MultipartFile photo) throws IOException {
+			// Generate a unique filename for the new photo
+			String fileName = System.currentTimeMillis() + "_" + photo.getOriginalFilename();
+			// Define the upload directory
+			// Create the directory if it doesn't exist
+			Path directoryPath = Paths.get(uploadDir);
+			Files.createDirectories(directoryPath);
+			// Save the photo to the upload directory
+			Path filePath = Paths.get(uploadDir, fileName);
+			Files.write(filePath, photo.getBytes());
+			return filePath.toString();
+		}
+
+		@Override
+		@Transactional
+		public void uploadPhoto(String employeeId, MultipartFile file) throws Exception {
+			// Generate a unique filename
+			String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+
+			if (file.isEmpty()) {
+				throw new IllegalArgumentException("File is empty");
+			}
+
+			// Save the image file to a local directory
+
+			Path directoryPath = Paths.get(uploadDir);
+			Files.createDirectories(directoryPath);
+
+			String filePath = Paths.get(uploadDir, uniqueFileName).toString();
+			Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+
+			// Store the image path in the database
+			Employee employee = employeeRepository.findById(employeeId)
+					.orElseThrow(() -> new Exception("Employee not found"));
+			;
+			if (employee != null) {
+				employee.setImagePath(filePath);
+				employeeRepository.save(employee);
+			} else {
+				throw new IllegalArgumentException("User with employee id does not exist.");
+			}
+
+		}
+
+	}
+
 
 	
    
 	
 
-}
+
