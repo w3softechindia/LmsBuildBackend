@@ -31,6 +31,10 @@ public interface EmployeeService {
 	public String getMeetingLinkByTeamName(String teamName) throws Exception;
 	
 	public SubCourse getSubCourseBySubName(String subCourseName);
-
+	
+	public SubCourse updateSubCourseProgress(String SubCourseName, int progress);
+	
+	public SubCourse updateSubCourseStatus(String SubCourseName, String status) throws Exception;
+	
 }
 

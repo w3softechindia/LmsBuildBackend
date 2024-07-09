@@ -1,8 +1,8 @@
 package com.example.main.controller;
 
 import java.util.List;
-
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.SubCourse;
@@ -98,18 +99,35 @@ public class EmployeeController {
 		Course updateCourseProgress = employeeService.updateCourseProgress(courseName, progress);
 		return new ResponseEntity<Course>(updateCourseProgress, HttpStatus.OK);
 	}
-  
+
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getMeetingLinkByTeamName/{teamName}")
-	public ResponseEntity<String> getMeetingLinkByTeamName(@PathVariable String teamName) throws Exception{
+	public ResponseEntity<String> getMeetingLinkByTeamName(@PathVariable String teamName) throws Exception {
 		String meetingLinkByTeamName = employeeService.getMeetingLinkByTeamName(teamName);
-		return new ResponseEntity<String>(meetingLinkByTeamName,HttpStatus.OK);
+		return new ResponseEntity<String>(meetingLinkByTeamName, HttpStatus.OK);
 	}
-	
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getSubCourseBySubName/{subCourseName}")
 	public ResponseEntity<SubCourse> getSubCourseBySubName(@PathVariable String subCourseName) {
 		SubCourse courseByCourseName = employeeService.getSubCourseBySubName(subCourseName);
 		return new ResponseEntity<SubCourse>(courseByCourseName, HttpStatus.OK);
 	}
+
+	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PutMapping("/updateSubCourseProgress/{subCourseName}/{progress}")
+	public ResponseEntity<SubCourse> updateSubCourseProgress(@PathVariable String subCourseName,
+			@PathVariable int progress) {
+		SubCourse updatedSubCourse = employeeService.updateSubCourseProgress(subCourseName, progress);
+		return ResponseEntity.ok(updatedSubCourse);
+	}
+
+	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PutMapping("/updateSubCourseStatus/{SubCourseName}/{status}")
+	public ResponseEntity<SubCourse> updateSubCourseStatus(@PathVariable String SubCourseName,
+			@PathVariable String status) throws Exception {
+
+		SubCourse updateTaskStatus = employeeService.updateSubCourseStatus(SubCourseName, status);
+		return new ResponseEntity<SubCourse>(updateTaskStatus, HttpStatus.OK);
+	}
+
 }
