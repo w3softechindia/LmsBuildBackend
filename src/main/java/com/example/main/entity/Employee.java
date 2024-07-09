@@ -1,5 +1,6 @@
 package com.example.main.entity;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,6 +44,8 @@ public class Employee implements UserDetails{
 	private String employeePassword;
 	private long phoneNumber;
 	private String imagePath;
+	private LocalDate dateOfJoin;
+	private String status;
 	
 	@Column(name = "image_bytes", columnDefinition = "LONGBLOB")
 	private byte[] imageBytes;

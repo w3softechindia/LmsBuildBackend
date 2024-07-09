@@ -61,7 +61,7 @@ public class EmployeeController {
 		}
 	}
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PreAuthorize("hasAnyRole('Developer', 'Tester','Admin')")
 	@GetMapping("/getCourseByCourseName/{courseName}")
 	public ResponseEntity<Course> getCourseByCourseName(@PathVariable String courseName) {
 		Course courseByCourseName = employeeService.getCourseByCourseName(courseName);
