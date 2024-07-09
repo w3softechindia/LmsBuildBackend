@@ -195,8 +195,4 @@ public class EmployeeImpl implements EmployeeService {
 		}
 	}
 
-	@Override
-	public SubCourse getSubCourseBySubName(String subCourseName) {
-		return subCourseRepository.findById(subCourseName).orElse(null);	
-	}
 }
