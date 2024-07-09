@@ -2,9 +2,11 @@ package com.example.main.serviceImplementation;
 
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.SubCourse;
@@ -34,7 +36,7 @@ public class EmployeeImpl implements EmployeeService {
 
 	@Autowired
 	private TaskRepository taskRepository;
-	
+
 	@Autowired
 	private SubCourseRepository subCourseRepository;
 
@@ -154,17 +156,42 @@ public class EmployeeImpl implements EmployeeService {
 
 	@Override
 	public String getMeetingLinkByTeamName(String teamName) throws Exception {
-		
+
 		Team team = teamRepository.findById(teamName).orElseThrow(() -> new Exception("Team Name not found"));
-    if (team != null) {
-        return team.getMeetingLink();
-    }
-	return null;
+		if (team != null) {
+			return team.getMeetingLink();
+		}
+		return null;
 	}
 
 	@Override
 	public SubCourse getSubCourseBySubName(String subCourseName) {
-		return subCourseRepository.findById(subCourseName).orElse(null);	
+		return subCourseRepository.findById(subCourseName).orElse(null);
+	}
+
+	@Override
+	public SubCourse updateSubCourseProgress(String subCourseName, int progress) {
+		SubCourse subCourse = subCourseRepository.findById(subCourseName)
+				.orElseThrow(() -> new RuntimeException("SubCourse not found"));
+
+		int newProgress = Math.min(progress, 100);
+		subCourse.setProgress(newProgress);
+
+		// Optionally handle logic for subsequent subCourses here
+
+		return subCourseRepository.save(subCourse);
+	}
+
+	@Override
+	public SubCourse updateSubCourseStatus(String SubCourseName, String status) throws Exception {
+		SubCourse subCourse = subCourseRepository.findById(SubCourseName)
+				.orElseThrow(() -> new Exception("SubCourse Name not found..!!"));
+
+		if (status.equals("Completed") || status.equals("InComplete")) {
+			subCourse.setStatus(status);
+			return subCourseRepository.save(subCourse);
+		} else {
+			throw new Exception("Only 'Completed' and 'InComplete' statuses are allowed");
+		}
 	}
 }
-	
