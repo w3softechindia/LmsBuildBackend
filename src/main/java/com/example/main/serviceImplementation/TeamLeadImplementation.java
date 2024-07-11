@@ -1,14 +1,13 @@
 package com.example.main.serviceImplementation;
 
-import java.util.ArrayList;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -305,5 +304,11 @@ public class TeamLeadImplementation implements TeamLeadService {
 		List<Team> teamLeadId = teamRepository.findByTeamLeadId(employeeId);
 		return teamLeadId.size();
 	}
+
+//	@Override
+//	public long getTotalCoursesByTeamLead(String employeeId) throws Exception {
+//		List<Course> course = courseRepository.findByTeamLeadId(employeeId);
+//		return course.size();
+//	}
 
 }

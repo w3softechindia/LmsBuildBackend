@@ -42,4 +42,6 @@ public interface TeamLeadService {
 	public void updatePhoto(String employeeId, MultipartFile photo) throws IOException, Exception;
 	
 	public long getTotalTeamsByTeamLead(String employeeId);
+	
+//	public long getTotalCoursesByTeamLead(String employeeId) throws Exception;
 }

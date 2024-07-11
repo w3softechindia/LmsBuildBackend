@@ -108,7 +108,7 @@ public class TeamLeadController {
 
 	}
 
-	@PreAuthorize("hasRole('TeamLead','Admin')")
+	@PreAuthorize("hasAnyRole('TeamLead','Admin')")
 	@GetMapping("/getTeamByName/{teamName}")
 	public ResponseEntity<Team> getTeamByName(@PathVariable String teamName) throws Exception {
 		Team teamByName = teamLeadService.getTeamByName(teamName);
