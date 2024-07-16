@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
+import com.example.main.entity.Team;
 import com.example.main.service.EmployeeService;
 
 @RestController
@@ -112,22 +112,49 @@ public class EmployeeController {
 		SubCourse courseByCourseName = employeeService.getSubCourseBySubName(subCourseName);
 		return new ResponseEntity<SubCourse>(courseByCourseName, HttpStatus.OK);
 	}
-
+	
+	
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-	@PutMapping("/updateSubCourseProgress/{subCourseName}/{progress}")
-	public ResponseEntity<SubCourse> updateSubCourseProgress(@PathVariable String subCourseName,
-			@PathVariable int progress) {
-		SubCourse updatedSubCourse = employeeService.updateSubCourseProgress(subCourseName, progress);
-		return ResponseEntity.ok(updatedSubCourse);
-	}
-
+	@PostMapping("/markSessionAsAttended/{classId}")
+    public ResponseEntity<String> markSessionAsAttended(@PathVariable int classId) {
+        employeeService.markSessionAsAttended(classId);
+        return ResponseEntity.ok("Session marked as attended");
+    }
+	
+	
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-	@PutMapping("/updateSubCourseStatus/{SubCourseName}/{status}")
-	public ResponseEntity<SubCourse> updateSubCourseStatus(@PathVariable String SubCourseName,
-			@PathVariable String status) throws Exception {
-
-		SubCourse updateTaskStatus = employeeService.updateSubCourseStatus(SubCourseName, status);
-		return new ResponseEntity<SubCourse>(updateTaskStatus, HttpStatus.OK);
+	@GetMapping("/getTeamByEmployeeId/{employeeId}")
+	public ResponseEntity<Team> getTeamByEmployeeId (@PathVariable String employeeId) throws Exception{
+		
+		Team team = employeeService.getTeamByEmployeeId(employeeId);
+		return ResponseEntity.ok(team);
+		
 	}
-
 }
+
+
+
+//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+//	@PutMapping("/updateSubCourseProgress/{subCourseName}/{progress}")
+//	public ResponseEntity<SubCourse> updateSubCourseProgress(@PathVariable String subCourseName,
+//			@PathVariable int progress) {
+//		SubCourse updatedSubCourse = employeeService.updateSubCourseProgress(subCourseName, progress);
+//		return ResponseEntity.ok(updatedSubCourse);
+//	}
+//
+//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+//	@PutMapping("/updateSubCourseStatus/{SubCourseName}/{status}")
+//	public ResponseEntity<SubCourse> updateSubCourseStatus(@PathVariable String SubCourseName,
+//			@PathVariable String status) throws Exception {
+//
+//		SubCourse updateTaskStatus = employeeService.updateSubCourseStatus(SubCourseName, status);
+//		return new ResponseEntity<SubCourse>(updateTaskStatus, HttpStatus.OK);
+//	}
+
+//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+//	@PostMapping("/createSubCourse")
+//	public ResponseEntity<SubCourse>createSubCourse(@RequestBody SubCourse subCourse){
+//		
+//		SubCourse Course1 = employeeService.createSubCourse(subCourse);
+//		return new ResponseEntity<SubCourse>(Course1,HttpStatus.OK);
+//	}

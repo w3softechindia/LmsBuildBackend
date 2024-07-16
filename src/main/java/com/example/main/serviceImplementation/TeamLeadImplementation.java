@@ -20,11 +20,11 @@ import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Role;
 import com.example.main.entity.SubCourse;
-import com.example.main.entity.SubCourseRepository;
 import com.example.main.entity.Team;
 import com.example.main.exception.ResourceNotFound;
 import com.example.main.repository.CourseRepository;
 import com.example.main.repository.EmployeeRepository;
+import com.example.main.repository.SubCourseRepository;
 import com.example.main.repository.TeamRepository;
 import com.example.main.service.TeamLeadService;
 

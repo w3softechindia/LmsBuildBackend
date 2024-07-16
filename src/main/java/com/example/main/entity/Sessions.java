@@ -1,15 +1,14 @@
 package com.example.main.entity;
 
-import java.util.List;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,16 +17,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubCourse {
 
+public class Sessions {
+	
 	@Id
-	private String subCourseName;
-	private int subCourseDuration;
-//	private String meetingLink;
-//	private int progress;
-//	private String status;
-
+	@GeneratedValue (strategy = (GenerationType.IDENTITY))
+	private int classId;
+	private int classDuration;
+	private LocalDate classDate;
+	private String classStatus;
+	
 	@ManyToOne
 	@JsonBackReference
-	private Course course;
+	private SubCourse subCourse;
+	
 }

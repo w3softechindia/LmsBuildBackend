@@ -1,5 +1,7 @@
 package com.example.main.serviceImplementation;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -9,12 +11,14 @@ import org.springframework.stereotype.Service;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.Sessions;
 import com.example.main.entity.SubCourse;
-import com.example.main.entity.SubCourseRepository;
 import com.example.main.entity.Task;
 import com.example.main.entity.Team;
 import com.example.main.repository.CourseRepository;
 import com.example.main.repository.EmployeeRepository;
+import com.example.main.repository.SessionRepository;
+import com.example.main.repository.SubCourseRepository;
 import com.example.main.repository.TaskRepository;
 import com.example.main.repository.TeamRepository;
 import com.example.main.service.EmployeeService;
@@ -39,6 +43,9 @@ public class EmployeeImpl implements EmployeeService {
 
 	@Autowired
 	private SubCourseRepository subCourseRepository;
+
+	@Autowired
+	private SessionRepository sessionRepository;
 
 //	@SuppressWarnings("unused")
 //	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
@@ -169,30 +176,69 @@ public class EmployeeImpl implements EmployeeService {
 		return subCourseRepository.findById(subCourseName).orElse(null);
 	}
 
+	
 	@Override
-	public SubCourse updateSubCourseProgress(String subCourseName, int progress) {
-		SubCourse subCourse = subCourseRepository.findById(subCourseName)
-				.orElseThrow(() -> new RuntimeException("SubCourse not found"));
+	public void markSessionAsAttended(int classId) {
 
-		int newProgress = Math.min(progress, 100);
-		subCourse.setProgress(newProgress);
+		Sessions session = sessionRepository.findById(classId)
+				.orElseThrow(() -> new RuntimeException("Session not found"));
+		session.setClassStatus("Session attended");
+		sessionRepository.save(session);
 
-		// Optionally handle logic for subsequent subCourses here
-
-		return subCourseRepository.save(subCourse);
 	}
 
 	@Override
-	public SubCourse updateSubCourseStatus(String SubCourseName, String status) throws Exception {
-		SubCourse subCourse = subCourseRepository.findById(SubCourseName)
-				.orElseThrow(() -> new Exception("SubCourse Name not found..!!"));
-
-		if (status.equals("Completed") || status.equals("InComplete")) {
-			subCourse.setStatus(status);
-			return subCourseRepository.save(subCourse);
-		} else {
-			throw new Exception("Only 'Completed' and 'InComplete' statuses are allowed");
-		}
+	public Team getTeamByEmployeeId(String employeeId) throws Exception {
+		
+		  Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new Exception("Employee not found"));
+		  return employee.getTeam();
 	}
+
+	
 
 }
+
+//	@Override
+//	public SubCourse updateSubCourseProgress(String subCourseName, int progress) {
+//		SubCourse subCourse = subCourseRepository.findById(subCourseName)
+//				.orElseThrow(() -> new RuntimeException("SubCourse not found"));
+//
+//		int newProgress = Math.min(progress, 100);
+//		subCourse.setProgress(newProgress);
+//
+//
+//		return subCourseRepository.save(subCourse);
+//	}
+//
+//	@Override
+//	public SubCourse updateSubCourseStatus(String SubCourseName, String status) throws Exception {
+//		SubCourse subCourse = subCourseRepository.findById(SubCourseName)
+//				.orElseThrow(() -> new Exception("SubCourse Name not found..!!"));
+//
+//		if (status.equals("Completed") || status.equals("InComplete")) {
+//			subCourse.setStatus(status);
+//			return subCourseRepository.save(subCourse);
+//		} else {
+//			throw new Exception("Only 'Completed' and 'InComplete' statuses are allowed");
+//		}
+//	}
+
+//	@Override
+//	public SubCourse createSubCourse(SubCourse subCourse) {
+//		  subCourse = subCourseRepository.save(subCourse);
+//	        int duration = subCourse.getSubCourseDuration();
+//	        List<Sessions> sessionsList = new ArrayList<>();
+//
+//	        for (int i = 0; i < duration; i++) {
+//	            Sessions session = new Sessions();
+//	            session.setClassDuration(1);
+//	            session.setClassDate(LocalDate.now().plusDays(i));
+//	            session.setClassStatus(i % 2 == 0 ? "completed" : "incomplete");
+//	            session.setSubCourse(subCourse);
+//	            sessionsList.add(session);
+//	        }
+//
+//	        sessionRepository.saveAll(sessionsList);
+//	        subCourse.setSessions(sessionsList);
+//	        return subCourse;
+//	    }
