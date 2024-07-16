@@ -5,8 +5,10 @@ import java.util.Set;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.Sessions;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
+import com.example.main.entity.Team;
 
 public interface EmployeeService {
 	
@@ -32,9 +34,15 @@ public interface EmployeeService {
 	
 	public SubCourse getSubCourseBySubName(String subCourseName);
 	
-	public SubCourse updateSubCourseProgress(String SubCourseName, int progress);
+//	public SubCourse updateSubCourseProgress(String SubCourseName, int progress);
+//	
+//	public SubCourse updateSubCourseStatus(String SubCourseName, String status) throws Exception;
 	
-	public SubCourse updateSubCourseStatus(String SubCourseName, String status) throws Exception;
+//	public SubCourse createSubCourse(SubCourse subCourse);
+	
+	public void markSessionAsAttended(int classId);	
+	
+	public Team getTeamByEmployeeId (String employeeId) throws Exception;
 	
 }
 
