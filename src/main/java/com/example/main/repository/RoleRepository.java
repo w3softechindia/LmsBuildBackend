@@ -7,5 +7,6 @@ import com.example.main.entity.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, String> {
+	
 
 }

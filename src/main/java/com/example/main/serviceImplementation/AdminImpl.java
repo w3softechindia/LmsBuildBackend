@@ -148,7 +148,7 @@ Optional<Course> course = courseRepository.findById(courseId);
 	    // Send the original password in the email
 	    emailUtil.sendMail(employee.getEmployeeId(), employee.getFirstName(), employee.getLastName(), 
 	        employee.getWebMail(), employee.getWebMailPassword(), roleName, 
-	        employee.getPhoneNumber(), originalPassword, employee.getEmployeeEmail());
+	        employee.getPhoneNumber(), employee.getDateOfJoin(), originalPassword, employee.getEmployeeEmail());
 
 	    // Save the employee with the encoded password
 	    return employeeRepository.save(employee);
@@ -315,8 +315,8 @@ Optional<Course> course = courseRepository.findById(courseId);
 		public List<Employee> getEmployeesNotAdminAfterStatus() {
 			List<Employee> list = employeeRepository.findByStatus("Approved");
 //			List<Employee> list = employeeRepository.findByRoles_RoleNameNotAndStatus("Admin","Approved");
-			Collections.sort(list, (e1, e2) -> e1.getDateOfJoin().compareTo(e2.getDateOfJoin()));
-			sortEmployeesDescending(list);
+//		Collections.sort(list, (e1, e2) -> e1.getDateOfJoin().compareTo(e2.getDateOfJoin()));
+//			sortEmployeesDescending(list);
 			return list;
 		}
 

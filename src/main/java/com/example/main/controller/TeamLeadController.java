@@ -2,6 +2,7 @@ package com.example.main.controller;
 
 import java.io.IOException;
 
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -108,7 +109,7 @@ public class TeamLeadController {
 
 	}
 
-	@PreAuthorize("hasRole('TeamLead','Admin')")
+	@PreAuthorize("hasAnyRole('TeamLead','Admin')")
 	@GetMapping("/getTeamByName/{teamName}")
 	public ResponseEntity<Team> getTeamByName(@PathVariable String teamName) throws Exception {
 		Team teamByName = teamLeadService.getTeamByName(teamName);
@@ -194,9 +195,15 @@ public class TeamLeadController {
 
 	@PreAuthorize("hasRole('TeamLead')")
 	@GetMapping("/getTotalTeamsByTeamLead/{employeeId}")
-	 public ResponseEntity<Long> getTotalTeamsByTeamLead(@PathVariable String employeeId) {
-        long totalTeams = teamLeadService.getTotalTeamsByTeamLead(employeeId);
-        return ResponseEntity.ok(totalTeams);
-    }
+	public ResponseEntity<Long> getTotalTeamsByTeamLead(@PathVariable String employeeId) {
+		long totalTeams = teamLeadService.getTotalTeamsByTeamLead(employeeId);
+		return ResponseEntity.ok(totalTeams);
+	}
 
+//	@PreAuthorize("hasRole('TeamLead')")
+//	@GetMapping("/getTasksByTeamLead/{employeeId}")
+//	public ResponseEntity<List<Task>> getTasksByTeamLead(@PathVariable String employeeId) throws Exception {
+//		List<Task> teamlead = teamLeadService.getTasksByTeamlead(employeeId);
+//		return ResponseEntity.ok(teamlead);
+//	}
 }

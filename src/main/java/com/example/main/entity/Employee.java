@@ -44,8 +44,9 @@ public class Employee implements UserDetails{
 	private String employeePassword;
 	private long phoneNumber;
 	private String imagePath;
-	private LocalDate dateOfJoin;
+	private String dateOfJoin;
 	private String status;
+	
 	
 	@Column(name = "image_bytes", columnDefinition = "LONGBLOB")
 	private byte[] imageBytes;

@@ -1,6 +1,7 @@
 package com.example.main.controller;
 
 import java.util.List;
+
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class EmployeeController {
 		return new ResponseEntity<Course>(courseByCourseName, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PreAuthorize("hasRole('TeamLead')")
 	@PostMapping("/assignTasksToTeam/{teamName}")
 	public ResponseEntity<List<Task>> assignTasksToTeam(@RequestBody List<Task> tasks, @PathVariable String teamName) {
 		List<Task> assignTasksToTeam = employeeService.assignTasksToTeam(tasks, teamName);

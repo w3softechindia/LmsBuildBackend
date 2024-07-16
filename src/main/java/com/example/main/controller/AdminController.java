@@ -193,14 +193,14 @@ public class AdminController {
 		return ResponseEntity.ok(teams);
 
 	}
-@PreAuthorize("hasRole('Admin')")
+	@PreAuthorize("hasRole('Admin')")
 	@GetMapping("/employeesAfterStatus/notAdmin")
 	public ResponseEntity<List<Employee>> getEmployeesNotAdminAfterStatus() {
 		List<Employee> employees = adminService.getEmployeesNotAdminAfterStatus();
 		return ResponseEntity.ok(employees);
 
 	}
-@PreAuthorize("hasRole('Admin')")
+	@PreAuthorize("hasRole('Admin')")
 	@GetMapping("/employeesAfterStatus/byRole")
 	public ResponseEntity<List<Employee>> getEmployeesByRoleAfterStatus(@RequestParam String roleName) {
 		List<Employee> employees = adminService.getEmployeesByRoleAfterStatus(roleName);
