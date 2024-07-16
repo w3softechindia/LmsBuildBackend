@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
 
+
 	Employee findByEmployeeId(String employeeId);
 
 	@Modifying
@@ -27,7 +28,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 	List<Employee> findByStatus(String status);
 
   List<Employee> findByRoles_RoleNameAndStatus(String roleName, String status);
-   
-  List<Employee> findByRoles_RoleNameNotAndStatus(String roleName, String status);
-  
+
+    List<Employee> findByRoles_RoleNameNotAndStatus(String roleName, String status);
 }

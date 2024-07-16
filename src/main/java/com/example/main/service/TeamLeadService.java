@@ -1,6 +1,7 @@
 package com.example.main.service;
 
 import java.io.IOException;
+
 import java.util.List;
 import java.util.Set;
 
@@ -42,6 +43,11 @@ public interface TeamLeadService {
 	public void updatePhoto(String employeeId, MultipartFile photo) throws IOException, Exception;
 	
 	public long getTotalTeamsByTeamLead(String employeeId);
+	
+//	public List<Task> getTasksByTeamlead(String employeeId) throws Exception;
+
+	
+//	public List<Team> getTeamsByTeamLead(String employeeId);
 	
 //	public long getTotalCoursesByTeamLead(String employeeId) throws Exception;
 }

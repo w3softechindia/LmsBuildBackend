@@ -19,6 +19,7 @@ public class Task {
 	
 	@Id
     private String taskId;
+	private String taskName;
     private String description;
     private String startDate;
     private String endDate;

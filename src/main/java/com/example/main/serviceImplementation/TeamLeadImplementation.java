@@ -1,6 +1,7 @@
 package com.example.main.serviceImplementation;
 
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,6 +25,7 @@ import com.example.main.entity.Team;
 import com.example.main.exception.ResourceNotFound;
 import com.example.main.repository.CourseRepository;
 import com.example.main.repository.EmployeeRepository;
+import com.example.main.repository.TaskRepository;
 import com.example.main.repository.TeamRepository;
 import com.example.main.service.TeamLeadService;
 
@@ -43,6 +45,9 @@ public class TeamLeadImplementation implements TeamLeadService {
 
 	@Autowired
 	private TeamRepository teamRepository;
+
+	@Autowired
+	private TaskRepository taskRepository;
 
 	@SuppressWarnings("unused")
 	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
@@ -298,12 +303,23 @@ public class TeamLeadImplementation implements TeamLeadService {
 		return all;
 	}
 
-
 	@Override
 	public long getTotalTeamsByTeamLead(String employeeId) {
 		List<Team> teamLeadId = teamRepository.findByTeamLeadId(employeeId);
 		return teamLeadId.size();
 	}
+
+}
+
+//	@Override
+//	public List<Task> getTasksByTeamlead(String employeeId) throws Exception {
+//		 List<Team> team = teamRepository.findByTeamLeadId(employeeId);
+//	        if (team == null) {
+//	            throw new Exception("Team not found for the given team lead ID");
+//	        }
+//	        return taskRepository.findByTeam(team);
+//	    }
+//	}
 
 //	@Override
 //	public long getTotalCoursesByTeamLead(String employeeId) throws Exception {
@@ -311,4 +327,4 @@ public class TeamLeadImplementation implements TeamLeadService {
 //		return course.size();
 //	}
 
-}
+

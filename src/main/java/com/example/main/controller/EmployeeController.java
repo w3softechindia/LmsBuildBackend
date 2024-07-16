@@ -1,6 +1,7 @@
 package com.example.main.controller;
 
 import java.util.List;
+
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.main.entity.Course;
@@ -69,7 +69,7 @@ public class EmployeeController {
 		return new ResponseEntity<Course>(courseByCourseName, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PreAuthorize("hasRole('TeamLead')")
 	@PostMapping("/assignTasksToTeam/{teamName}")
 	public ResponseEntity<List<Task>> assignTasksToTeam(@RequestBody List<Task> tasks, @PathVariable String teamName) {
 		List<Task> assignTasksToTeam = employeeService.assignTasksToTeam(tasks, teamName);
