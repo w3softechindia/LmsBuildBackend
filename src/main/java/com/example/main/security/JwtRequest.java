@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JwtRequest {
-	
-	private String employeeId;
-	private String employeePassword;
-	
 
+    private String employeeId;
+    private String employeePassword;
+    private boolean rememberMe;
 }

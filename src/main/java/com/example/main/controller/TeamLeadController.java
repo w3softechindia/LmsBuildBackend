@@ -26,6 +26,7 @@ import com.example.main.dto.CourseDto;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.SubCourse;
+import com.example.main.entity.Task;
 import com.example.main.entity.Team;
 import com.example.main.service.TeamLeadService;
 
@@ -199,6 +200,15 @@ public class TeamLeadController {
 		long totalTeams = teamLeadService.getTotalTeamsByTeamLead(employeeId);
 		return ResponseEntity.ok(totalTeams);
 	}
+	
+	@PreAuthorize("hasRole('TeamLead')")
+	@GetMapping("/getTasksByTeamlead/{teamName}")
+	public ResponseEntity<List<Task>> getTasksByTeamlead(@PathVariable String teamName) throws Exception {
+		List<Task> list = teamLeadService.getTasksByTeamlead(teamName);
+		return ResponseEntity.ok(list);
+	}
+	
+	
 
 //	@PreAuthorize("hasRole('TeamLead')")
 //	@GetMapping("/getTasksByTeamLead/{employeeId}")

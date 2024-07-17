@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.SubCourse;
+import com.example.main.entity.Task;
 import com.example.main.entity.Team;
 
 public interface TeamLeadService {
@@ -44,7 +45,7 @@ public interface TeamLeadService {
 	
 	public long getTotalTeamsByTeamLead(String employeeId);
 	
-//	public List<Task> getTasksByTeamlead(String employeeId) throws Exception;
+	public List<Task> getTasksByTeamlead(String teamName) throws Exception;
 
 	
 //	public List<Team> getTeamsByTeamLead(String employeeId);

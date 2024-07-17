@@ -20,6 +20,7 @@ import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Role;
 import com.example.main.entity.SubCourse;
+import com.example.main.entity.Task;
 import com.example.main.entity.Team;
 import com.example.main.exception.ResourceNotFound;
 import com.example.main.repository.CourseRepository;
@@ -307,6 +308,12 @@ public class TeamLeadImplementation implements TeamLeadService {
 	public long getTotalTeamsByTeamLead(String employeeId) {
 		List<Team> teamLeadId = teamRepository.findByTeamLeadId(employeeId);
 		return teamLeadId.size();
+	}
+
+	@Override
+	public List<Task> getTasksByTeamlead(String teamName) throws Exception {
+		List<Task> list = taskRepository.findByTeam_TeamName(teamName);
+		return list;
 	}
 
 }
