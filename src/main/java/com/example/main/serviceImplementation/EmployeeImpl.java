@@ -135,31 +135,31 @@ public class EmployeeImpl implements EmployeeService {
 		}
 	}
 
-	@Override
-	public Course updateCourseProgress(String courseName, int progress) {
-
-		Course course = courseRepository.findById(courseName)
-				.orElseThrow(() -> new RuntimeException("Course not found"));
-
-		int newProgress = Math.min(progress, 100);
-		course.setProgress(newProgress);
-
-		if (newProgress == 100) {
-
-			List<Course> allCourses = courseRepository.findAll();
-			for (int i = 0; i < allCourses.size(); i++) {
-				if (allCourses.get(i).getCourseName().equals(courseName) && i < allCourses.size() - 1) {
-					Course nextCourse = allCourses.get(i + 1);
-					nextCourse.setProgress(Math.min(nextCourse.getProgress() + 20, 100));
-					courseRepository.save(nextCourse);
-					break;
-				}
-			}
-
-		}
-		return courseRepository.save(course);
-
-	}
+//	@Override
+//	public Course updateCourseProgress(String courseName, int progress) {
+//
+//		Course course = courseRepository.findById(courseName)
+//				.orElseThrow(() -> new RuntimeException("Course not found"));
+//
+//		int newProgress = Math.min(progress, 100);
+//		course.setProgress(newProgress);
+//
+//		if (newProgress == 100) {
+//
+//			List<Course> allCourses = courseRepository.findAll();
+//			for (int i = 0; i < allCourses.size(); i++) {
+//				if (allCourses.get(i).getCourseName().equals(courseName) && i < allCourses.size() - 1) {
+//					Course nextCourse = allCourses.get(i + 1);
+//					nextCourse.setProgress(Math.min(nextCourse.getProgress() + 20, 100));
+//					courseRepository.save(nextCourse);
+//					break;
+//				}
+//			}
+//
+//		}
+//		return courseRepository.save(course);
+//
+//	}
 
 	@Override
 	public String getMeetingLinkByTeamName(String teamName) throws Exception {

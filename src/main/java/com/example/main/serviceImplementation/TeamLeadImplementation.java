@@ -318,20 +318,4 @@ public class TeamLeadImplementation implements TeamLeadService {
 
 }
 
-//	@Override
-//	public List<Task> getTasksByTeamlead(String employeeId) throws Exception {
-//		 List<Team> team = teamRepository.findByTeamLeadId(employeeId);
-//	        if (team == null) {
-//	            throw new Exception("Team not found for the given team lead ID");
-//	        }
-//	        return taskRepository.findByTeam(team);
-//	    }
-//	}
-
-//	@Override
-//	public long getTotalCoursesByTeamLead(String employeeId) throws Exception {
-//		List<Course> course = courseRepository.findByTeamLeadId(employeeId);
-//		return course.size();
-//	}
-
 

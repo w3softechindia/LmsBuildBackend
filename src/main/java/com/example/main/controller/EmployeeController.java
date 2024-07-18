@@ -94,12 +94,12 @@ public class EmployeeController {
 		return new ResponseEntity<Task>(updateTaskStatus, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-	@PutMapping("/updateCourseProgress/{courseName}/{progress}")
-	public ResponseEntity<Course> updateCourseProgress(@PathVariable String courseName, @PathVariable int progress) {
-		Course updateCourseProgress = employeeService.updateCourseProgress(courseName, progress);
-		return new ResponseEntity<Course>(updateCourseProgress, HttpStatus.OK);
-	}
+//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+//	@PutMapping("/updateCourseProgress/{courseName}/{progress}")
+//	public ResponseEntity<Course> updateCourseProgress(@PathVariable String courseName, @PathVariable int progress) {
+//		Course updateCourseProgress = employeeService.updateCourseProgress(courseName, progress);
+//		return new ResponseEntity<Course>(updateCourseProgress, HttpStatus.OK);
+//	}
 
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getMeetingLinkByTeamName/{teamName}")
