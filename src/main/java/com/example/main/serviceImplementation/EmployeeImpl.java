@@ -1,5 +1,7 @@
 package com.example.main.serviceImplementation;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -126,31 +128,31 @@ public class EmployeeImpl implements EmployeeService {
 		}
 	}
 
-	@Override
-	public Course updateCourseProgress(String courseName, int progress) {
-
-		Course course = courseRepository.findById(courseName)
-				.orElseThrow(() -> new RuntimeException("Course not found"));
-
-		int newProgress = Math.min(progress, 100);
-		course.setProgress(newProgress);
-
-		if (newProgress == 100) {
-
-			List<Course> allCourses = courseRepository.findAll();
-			for (int i = 0; i < allCourses.size(); i++) {
-				if (allCourses.get(i).getCourseName().equals(courseName) && i < allCourses.size() - 1) {
-					Course nextCourse = allCourses.get(i + 1);
-					nextCourse.setProgress(Math.min(nextCourse.getProgress() + 20, 100));
-					courseRepository.save(nextCourse);
-					break;
-				}
-			}
-
-		}
-		return courseRepository.save(course);
-
-	}
+//	@Override
+//	public Course updateCourseProgress(String courseName, int progress) {
+//
+//		Course course = courseRepository.findById(courseName)
+//				.orElseThrow(() -> new RuntimeException("Course not found"));
+//
+//		int newProgress = Math.min(progress, 100);
+//		course.setProgress(newProgress);
+//
+//		if (newProgress == 100) {
+//
+//			List<Course> allCourses = courseRepository.findAll();
+//			for (int i = 0; i < allCourses.size(); i++) {
+//				if (allCourses.get(i).getCourseName().equals(courseName) && i < allCourses.size() - 1) {
+//					Course nextCourse = allCourses.get(i + 1);
+//					nextCourse.setProgress(Math.min(nextCourse.getProgress() + 20, 100));
+//					courseRepository.save(nextCourse);
+//					break;
+//				}
+//			}
+//
+//		}
+//		return courseRepository.save(course);
+//
+//	}
 
 	@Override
 	public String getMeetingLinkByTeamName(String teamName) throws Exception {
@@ -167,9 +169,9 @@ public class EmployeeImpl implements EmployeeService {
 		return subCourseRepository.findById(subCourseName).orElse(null);
 	}
 
+	
 	@Override
 	public void markSessionAsAttended(int classId) {
-
 		Sessions session = sessionRepository.findById(classId)
 				.orElseThrow(() -> new RuntimeException("Session not found"));
 		session.setClassStatus("Session attended");
@@ -186,3 +188,48 @@ public class EmployeeImpl implements EmployeeService {
 	}
 
 }
+
+//	@Override
+//	public SubCourse updateSubCourseProgress(String subCourseName, int progress) {
+//		SubCourse subCourse = subCourseRepository.findById(subCourseName)
+//				.orElseThrow(() -> new RuntimeException("SubCourse not found"));
+//
+//		int newProgress = Math.min(progress, 100);
+//		subCourse.setProgress(newProgress);
+//
+//
+//		return subCourseRepository.save(subCourse);
+//	}
+//
+//	@Override
+//	public SubCourse updateSubCourseStatus(String SubCourseName, String status) throws Exception {
+//		SubCourse subCourse = subCourseRepository.findById(SubCourseName)
+//				.orElseThrow(() -> new Exception("SubCourse Name not found..!!"));
+//
+//		if (status.equals("Completed") || status.equals("InComplete")) {
+//			subCourse.setStatus(status);
+//			return subCourseRepository.save(subCourse);
+//		} else {
+//			throw new Exception("Only 'Completed' and 'InComplete' statuses are allowed");
+//		}
+//	}
+
+//	@Override
+//	public SubCourse createSubCourse(SubCourse subCourse) {
+//		  subCourse = subCourseRepository.save(subCourse);
+//	        int duration = subCourse.getSubCourseDuration();
+//	        List<Sessions> sessionsList = new ArrayList<>();
+//
+//	        for (int i = 0; i < duration; i++) {
+//	            Sessions session = new Sessions();
+//	            session.setClassDuration(1);
+//	            session.setClassDate(LocalDate.now().plusDays(i));
+//	            session.setClassStatus(i % 2 == 0 ? "completed" : "incomplete");
+//	            session.setSubCourse(subCourse);
+//	            sessionsList.add(session);
+//	        }
+//
+//	        sessionRepository.saveAll(sessionsList);
+//	        subCourse.setSessions(sessionsList);
+//	        return subCourse;
+//	    }

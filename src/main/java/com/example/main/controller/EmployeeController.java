@@ -114,13 +114,23 @@ public class EmployeeController {
 		SubCourse courseByCourseName = employeeService.getSubCourseBySubName(subCourseName);
 		return new ResponseEntity<SubCourse>(courseByCourseName, HttpStatus.OK);
 	}
-
+	
+	
+	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PostMapping("/markSessionAsAttended/{classId}")
+    public ResponseEntity<String> markSessionAsAttended(@PathVariable int classId) {
+        employeeService.markSessionAsAttended(classId);
+        return ResponseEntity.ok("Session marked as attended");
+    }
+	
+	
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@PostMapping("/markSessionAsAttended/{classId}")
 	public ResponseEntity<String> markSessionAsAttended(@PathVariable int classId) {
 		employeeService.markSessionAsAttended(classId);
 		return ResponseEntity.ok("Session marked as attended");
 	}
+}
 
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getTeamByEmployeeId/{employeeId}")
@@ -131,4 +141,27 @@ public class EmployeeController {
 
 	}
 
-}
+//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+//	@PutMapping("/updateSubCourseProgress/{subCourseName}/{progress}")
+//	public ResponseEntity<SubCourse> updateSubCourseProgress(@PathVariable String subCourseName,
+//			@PathVariable int progress) {
+//		SubCourse updatedSubCourse = employeeService.updateSubCourseProgress(subCourseName, progress);
+//		return ResponseEntity.ok(updatedSubCourse);
+//	}
+//
+//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+//	@PutMapping("/updateSubCourseStatus/{SubCourseName}/{status}")
+//	public ResponseEntity<SubCourse> updateSubCourseStatus(@PathVariable String SubCourseName,
+//			@PathVariable String status) throws Exception {
+//
+//		SubCourse updateTaskStatus = employeeService.updateSubCourseStatus(SubCourseName, status);
+//		return new ResponseEntity<SubCourse>(updateTaskStatus, HttpStatus.OK);
+//	}
+
+//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+//	@PostMapping("/createSubCourse")
+//	public ResponseEntity<SubCourse>createSubCourse(@RequestBody SubCourse subCourse){
+//		
+//		SubCourse Course1 = employeeService.createSubCourse(subCourse);
+//		return new ResponseEntity<SubCourse>(Course1,HttpStatus.OK);
+//	}

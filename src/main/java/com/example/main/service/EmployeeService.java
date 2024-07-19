@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
+import com.example.main.entity.Sessions;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
 import com.example.main.entity.Team;
@@ -27,7 +28,7 @@ public interface EmployeeService {
 	
 	public Task updateTaskStatus(String taskId,String status) throws Exception;
 	
-	public Course updateCourseProgress(String courseName, int progress);
+//	public Course updateCourseProgress(String courseName, int progress);
   
 	public String getMeetingLinkByTeamName(String teamName) throws Exception;
 	
@@ -36,7 +37,6 @@ public interface EmployeeService {
 	public void markSessionAsAttended(int classId);	
 	
 	public Team getTeamByEmployeeIdd (String employeeId) throws Exception;
-	
-	
+		
 }
 
