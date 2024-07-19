@@ -24,7 +24,6 @@ public class SubCourse {
 	private String subCourseName;
 	private int subCourseDuration;
 //	private String meetingLink;
-//	private int progress;
 //	private String status;
 
 	@ManyToOne

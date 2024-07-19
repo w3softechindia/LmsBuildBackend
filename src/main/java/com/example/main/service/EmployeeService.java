@@ -34,15 +34,9 @@ public interface EmployeeService {
 	
 	public SubCourse getSubCourseBySubName(String subCourseName);
 	
-//	public SubCourse updateSubCourseProgress(String SubCourseName, int progress);
-//	
-//	public SubCourse updateSubCourseStatus(String SubCourseName, String status) throws Exception;
-	
-//	public SubCourse createSubCourse(SubCourse subCourse);
-	
 	public void markSessionAsAttended(int classId);	
 	
-	public Team getTeamByEmployeeId (String employeeId) throws Exception;
-	
+	public Team getTeamByEmployeeIdd (String employeeId) throws Exception;
+		
 }
 

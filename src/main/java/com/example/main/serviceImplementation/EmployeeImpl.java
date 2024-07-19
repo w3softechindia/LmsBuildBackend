@@ -47,13 +47,9 @@ public class EmployeeImpl implements EmployeeService {
 	@Autowired
 	private SessionRepository sessionRepository;
 
-//	@SuppressWarnings("unused")
-//	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
-//	String uploadDir = "E:\\LMS_Backup_Folder\\Lms_Picture";
-
-//	@SuppressWarnings("unused")
-//	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
-//	String uploadDir = "E:\\LMS_Backup_Folder\\Lms_Picture";
+	@SuppressWarnings("unused")
+	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
+	String uploadDir = "E:\\LMS_Backup_Folder\\Picture";
 
 	@Override
 	public Employee getEmployeeDetails(String employeeId) throws Exception {
@@ -72,10 +68,7 @@ public class EmployeeImpl implements EmployeeService {
 		existingEmployee.setFirstName(employee.getFirstName());
 		existingEmployee.setLastName(employee.getLastName());
 		existingEmployee.setAddress(employee.getAddress());
-		existingEmployee.setWebMail(employee.getWebMail());
-		existingEmployee.setWebMailPassword(employee.getWebMailPassword());
 		existingEmployee.setEmployeeEmail(employee.getEmployeeEmail());
-		existingEmployee.setEmployeePassword(employee.getEmployeePassword());
 		existingEmployee.setPhoneNumber(employee.getPhoneNumber());
 		return employeeRepository.save(existingEmployee);
 	}
@@ -179,7 +172,6 @@ public class EmployeeImpl implements EmployeeService {
 	
 	@Override
 	public void markSessionAsAttended(int classId) {
-
 		Sessions session = sessionRepository.findById(classId)
 				.orElseThrow(() -> new RuntimeException("Session not found"));
 		session.setClassStatus("Session attended");
@@ -188,10 +180,11 @@ public class EmployeeImpl implements EmployeeService {
 	}
 
 	@Override
-	public Team getTeamByEmployeeId(String employeeId) throws Exception {
-		
-		  Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new Exception("Employee not found"));
-		  return employee.getTeam();
+	public Team getTeamByEmployeeIdd(String employeeId) throws Exception {
+
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new Exception("Employee not found"));
+		return employee.getTeam();
 	}
 
 }
