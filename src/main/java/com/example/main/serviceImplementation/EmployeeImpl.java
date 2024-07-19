@@ -1,7 +1,5 @@
 package com.example.main.serviceImplementation;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -47,13 +45,9 @@ public class EmployeeImpl implements EmployeeService {
 	@Autowired
 	private SessionRepository sessionRepository;
 
-//	@SuppressWarnings("unused")
-//	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
-//	String uploadDir = "E:\\LMS_Backup_Folder\\Lms_Picture";
-
-//	@SuppressWarnings("unused")
-//	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
-//	String uploadDir = "E:\\LMS_Backup_Folder\\Lms_Picture";
+	@SuppressWarnings("unused")
+	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
+	String uploadDir = "E:\\LMS_Backup_Folder\\Picture";
 
 	@Override
 	public Employee getEmployeeDetails(String employeeId) throws Exception {
@@ -72,10 +66,7 @@ public class EmployeeImpl implements EmployeeService {
 		existingEmployee.setFirstName(employee.getFirstName());
 		existingEmployee.setLastName(employee.getLastName());
 		existingEmployee.setAddress(employee.getAddress());
-		existingEmployee.setWebMail(employee.getWebMail());
-		existingEmployee.setWebMailPassword(employee.getWebMailPassword());
 		existingEmployee.setEmployeeEmail(employee.getEmployeeEmail());
-		existingEmployee.setEmployeePassword(employee.getEmployeePassword());
 		existingEmployee.setPhoneNumber(employee.getPhoneNumber());
 		return employeeRepository.save(existingEmployee);
 	}
@@ -176,7 +167,6 @@ public class EmployeeImpl implements EmployeeService {
 		return subCourseRepository.findById(subCourseName).orElse(null);
 	}
 
-	
 	@Override
 	public void markSessionAsAttended(int classId) {
 
@@ -188,55 +178,11 @@ public class EmployeeImpl implements EmployeeService {
 	}
 
 	@Override
-	public Team getTeamByEmployeeId(String employeeId) throws Exception {
-		
-		  Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new Exception("Employee not found"));
-		  return employee.getTeam();
+	public Team getTeamByEmployeeIdd(String employeeId) throws Exception {
+
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new Exception("Employee not found"));
+		return employee.getTeam();
 	}
 
 }
-
-//	@Override
-//	public SubCourse updateSubCourseProgress(String subCourseName, int progress) {
-//		SubCourse subCourse = subCourseRepository.findById(subCourseName)
-//				.orElseThrow(() -> new RuntimeException("SubCourse not found"));
-//
-//		int newProgress = Math.min(progress, 100);
-//		subCourse.setProgress(newProgress);
-//
-//
-//		return subCourseRepository.save(subCourse);
-//	}
-//
-//	@Override
-//	public SubCourse updateSubCourseStatus(String SubCourseName, String status) throws Exception {
-//		SubCourse subCourse = subCourseRepository.findById(SubCourseName)
-//				.orElseThrow(() -> new Exception("SubCourse Name not found..!!"));
-//
-//		if (status.equals("Completed") || status.equals("InComplete")) {
-//			subCourse.setStatus(status);
-//			return subCourseRepository.save(subCourse);
-//		} else {
-//			throw new Exception("Only 'Completed' and 'InComplete' statuses are allowed");
-//		}
-//	}
-
-//	@Override
-//	public SubCourse createSubCourse(SubCourse subCourse) {
-//		  subCourse = subCourseRepository.save(subCourse);
-//	        int duration = subCourse.getSubCourseDuration();
-//	        List<Sessions> sessionsList = new ArrayList<>();
-//
-//	        for (int i = 0; i < duration; i++) {
-//	            Sessions session = new Sessions();
-//	            session.setClassDuration(1);
-//	            session.setClassDate(LocalDate.now().plusDays(i));
-//	            session.setClassStatus(i % 2 == 0 ? "completed" : "incomplete");
-//	            session.setSubCourse(subCourse);
-//	            sessionsList.add(session);
-//	        }
-//
-//	        sessionRepository.saveAll(sessionsList);
-//	        subCourse.setSessions(sessionsList);
-//	        return subCourse;
-//	    }

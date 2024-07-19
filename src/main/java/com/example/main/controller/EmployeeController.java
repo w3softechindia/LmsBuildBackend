@@ -94,12 +94,12 @@ public class EmployeeController {
 		return new ResponseEntity<Task>(updateTaskStatus, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-	@PutMapping("/updateCourseProgress/{courseName}/{progress}")
-	public ResponseEntity<Course> updateCourseProgress(@PathVariable String courseName, @PathVariable int progress) {
-		Course updateCourseProgress = employeeService.updateCourseProgress(courseName, progress);
-		return new ResponseEntity<Course>(updateCourseProgress, HttpStatus.OK);
-	}
+//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+//	@PutMapping("/updateCourseProgress/{courseName}/{progress}")
+//	public ResponseEntity<Course> updateCourseProgress(@PathVariable String courseName, @PathVariable int progress) {
+//		Course updateCourseProgress = employeeService.updateCourseProgress(courseName, progress);
+//		return new ResponseEntity<Course>(updateCourseProgress, HttpStatus.OK);
+//	}
 
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getMeetingLinkByTeamName/{teamName}")
@@ -107,55 +107,28 @@ public class EmployeeController {
 		String meetingLinkByTeamName = employeeService.getMeetingLinkByTeamName(teamName);
 		return new ResponseEntity<String>(meetingLinkByTeamName, HttpStatus.OK);
 	}
+
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getSubCourseBySubName/{subCourseName}")
 	public ResponseEntity<SubCourse> getSubCourseBySubName(@PathVariable String subCourseName) {
 		SubCourse courseByCourseName = employeeService.getSubCourseBySubName(subCourseName);
 		return new ResponseEntity<SubCourse>(courseByCourseName, HttpStatus.OK);
 	}
-	
-	
+
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@PostMapping("/markSessionAsAttended/{classId}")
-    public ResponseEntity<String> markSessionAsAttended(@PathVariable int classId) {
-        employeeService.markSessionAsAttended(classId);
-        return ResponseEntity.ok("Session marked as attended");
-    }
-	
-	
+	public ResponseEntity<String> markSessionAsAttended(@PathVariable int classId) {
+		employeeService.markSessionAsAttended(classId);
+		return ResponseEntity.ok("Session marked as attended");
+	}
+
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getTeamByEmployeeId/{employeeId}")
-	public ResponseEntity<Team> getTeamByEmployeeId (@PathVariable String employeeId) throws Exception{
-		
-		Team team = employeeService.getTeamByEmployeeId(employeeId);
+	public ResponseEntity<Team> getTeamByEmployeeIdd(@PathVariable String employeeId) throws Exception {
+
+		Team team = employeeService.getTeamByEmployeeIdd(employeeId);
 		return ResponseEntity.ok(team);
-		
+
 	}
+
 }
-
-
-
-//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-//	@PutMapping("/updateSubCourseProgress/{subCourseName}/{progress}")
-//	public ResponseEntity<SubCourse> updateSubCourseProgress(@PathVariable String subCourseName,
-//			@PathVariable int progress) {
-//		SubCourse updatedSubCourse = employeeService.updateSubCourseProgress(subCourseName, progress);
-//		return ResponseEntity.ok(updatedSubCourse);
-//	}
-//
-//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-//	@PutMapping("/updateSubCourseStatus/{SubCourseName}/{status}")
-//	public ResponseEntity<SubCourse> updateSubCourseStatus(@PathVariable String SubCourseName,
-//			@PathVariable String status) throws Exception {
-//
-//		SubCourse updateTaskStatus = employeeService.updateSubCourseStatus(SubCourseName, status);
-//		return new ResponseEntity<SubCourse>(updateTaskStatus, HttpStatus.OK);
-//	}
-
-//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-//	@PostMapping("/createSubCourse")
-//	public ResponseEntity<SubCourse>createSubCourse(@RequestBody SubCourse subCourse){
-//		
-//		SubCourse Course1 = employeeService.createSubCourse(subCourse);
-//		return new ResponseEntity<SubCourse>(Course1,HttpStatus.OK);
-//	}
