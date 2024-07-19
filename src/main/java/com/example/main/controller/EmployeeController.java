@@ -127,7 +127,6 @@ public class EmployeeController {
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getTeamByEmployeeId/{employeeId}")
 	public ResponseEntity<Team> getTeamByEmployeeIdd(@PathVariable String employeeId) throws Exception {
-
 		Team team = employeeService.getTeamByEmployeeIdd(employeeId);
 		return ResponseEntity.ok(team);
 
