@@ -122,15 +122,7 @@ public class EmployeeController {
         employeeService.markSessionAsAttended(classId);
         return ResponseEntity.ok("Session marked as attended");
     }
-	
-	
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
-	@PostMapping("/markSessionAsAttended/{classId}")
-	public ResponseEntity<String> markSessionAsAttended(@PathVariable int classId) {
-		employeeService.markSessionAsAttended(classId);
-		return ResponseEntity.ok("Session marked as attended");
-	}
-}
+
 
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getTeamByEmployeeId/{employeeId}")
@@ -141,6 +133,7 @@ public class EmployeeController {
 
 	}
 
+	}
 //	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 //	@PutMapping("/updateSubCourseProgress/{subCourseName}/{progress}")
 //	public ResponseEntity<SubCourse> updateSubCourseProgress(@PathVariable String subCourseName,
