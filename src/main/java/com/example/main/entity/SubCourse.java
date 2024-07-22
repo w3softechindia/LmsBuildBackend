@@ -23,8 +23,6 @@ public class SubCourse {
 	@Id
 	private String subCourseName;
 	private int subCourseDuration;
-//	private String meetingLink;
-//	private String status;
 
 	@ManyToOne
 	@JsonBackReference

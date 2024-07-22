@@ -2,10 +2,12 @@ package com.example.main.serviceImplementation;
 
 import java.io.IOException;
 
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,19 +18,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.main.entity.Attendance;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Role;
+import com.example.main.entity.Sessions;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
 import com.example.main.entity.Team;
 import com.example.main.exception.ResourceNotFound;
+import com.example.main.repository.AttendanceRepository;
 import com.example.main.repository.CourseRepository;
 import com.example.main.repository.EmployeeRepository;
+import com.example.main.repository.SessionRepository;
 import com.example.main.repository.SubCourseRepository;
 import com.example.main.repository.TaskRepository;
 import com.example.main.repository.TeamRepository;
 import com.example.main.service.TeamLeadService;
+import java.time.Duration;
+
 
 import jakarta.transaction.Transactional;
 
@@ -49,6 +57,12 @@ public class TeamLeadImplementation implements TeamLeadService {
 
 	@Autowired
 	private TaskRepository taskRepository;
+
+	@Autowired
+	private AttendanceRepository attendanceRepository;
+
+	@Autowired
+	private SessionRepository sessionRepository;
 
 	@SuppressWarnings("unused")
 	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
@@ -316,6 +330,124 @@ public class TeamLeadImplementation implements TeamLeadService {
 		return list;
 	}
 
+//	@Override
+//	public Attendance createAttendance(int classId, String employeeId, LocalDateTime startTime, LocalDateTime endTime) throws Exception {
+//	    // Fetch session and employee
+//	    Sessions session = sessionRepository.findById(classId)
+//	            .orElseThrow(() -> new RuntimeException("Session not found"));
+//	    Employee employee = employeeRepository.findById(employeeId)
+//	            .orElseThrow(() -> new Exception("Employee not found"));
+//
+//	    // Validate session times
+//	    LocalDateTime sessionStartTime = session.getStartTime();
+//	    LocalDateTime sessionEndTime = session.getEndTime();
+//	    if (sessionStartTime == null || sessionEndTime == null) {
+//	        throw new RuntimeException("Session times are not properly set");
+//	    }
+//
+//	    // Calculate total meeting duration
+//	    long totalMeetingMinutes = Duration.between(sessionStartTime, sessionEndTime).toMinutes();
+//
+//	    // Validate attendance times
+//	    if (startTime == null || endTime == null) {
+//	        throw new RuntimeException("Attendance times cannot be null");
+//	    }
+//
+//	    // Calculate the attendance duration
+//	    long attendanceMinutes = Duration.between(startTime, endTime).toMinutes();
+//
+//	    // Determine if the employee was present for at least 75% of the meeting
+//	    boolean isPresent = (attendanceMinutes >= totalMeetingMinutes * 0.75);
+//
+//	    // Create and save attendance record
+//	    Attendance attendance = new Attendance();
+//	    attendance.setEmployee(employee);
+//	    attendance.setSession(session);
+//	    attendance.setStartTime(startTime);
+//	    attendance.setEndTime(endTime);
+//	    attendance.setPresent(isPresent);
+//
+//	    return attendanceRepository.save(attendance);
+//	}
+	@Override
+    public Attendance createAttendance(int classId, String employeeId, LocalDateTime startTime, LocalDateTime endTime) throws Exception {
+        Sessions session = sessionRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("Session not found"));
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new Exception("Employee not found"));
+
+        if (session.getStartTime() == null || session.getEndTime() == null) {
+            throw new RuntimeException("Session times are not properly set");
+        }
+
+        session.setEmployee(employee);
+
+        Attendance attendance = new Attendance();
+        attendance.setEmployee(employee);
+        attendance.setSession(session);
+        attendance.setStartTime(startTime);
+        attendance.setEndTime(endTime);
+
+        Duration totalDuration = Duration.between(session.getStartTime(), session.getEndTime());
+        Duration attendedDuration = Duration.between(startTime, endTime);
+
+        double attendancePercentage = (double) attendedDuration.toMinutes() / totalDuration.toMinutes() * 100;
+        boolean isPresent = attendancePercentage >= 75;
+
+        attendance.setPresent(isPresent);
+
+        return attendanceRepository.save(attendance);
+    }
+	
+	@Override
+    public Set<Attendance> getAttendance(String employeeId) throws Exception {
+        // Verify that the employee exists
+        employeeRepository.findById(employeeId)
+            .orElseThrow(() -> new Exception("Employee not found"));
+
+        // Fetch and return the attendances for the given employeeId
+        return attendanceRepository.findByEmployee_EmployeeId(employeeId);
+    }
+
+	@Override
+	public void updateEmployeeAttendanceStatus(String employeeId) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        List<Attendance> attendances = attendanceRepository.findByEmployeeId(employeeId);
+        if (attendances.isEmpty()) {
+            employee.setAttendanceStatus("Absent");
+            employeeRepository.save(employee);
+            return;
+        }
+
+        int totalMeetingTimeMinutes = 0;
+        int attendedTimeMinutes = 0;
+
+        for (Attendance attendance : attendances) {
+            if (attendance.isPresent()) {
+                LocalDateTime startTime = attendance.getStartTime();
+                LocalDateTime endTime = attendance.getEndTime();
+                int durationMinutes = (int) java.time.Duration.between(startTime, endTime).toMinutes();
+                attendedTimeMinutes += durationMinutes;
+            }
+
+            Sessions session = attendance.getSession();
+            if (session != null) {
+                LocalDateTime sessionStart = session.getStartTime();
+                LocalDateTime sessionEnd = session.getEndTime();
+                int sessionDurationMinutes = (int) java.time.Duration.between(sessionStart, sessionEnd).toMinutes();
+                totalMeetingTimeMinutes += sessionDurationMinutes;
+            }
+        }
+
+        double attendancePercentage = ((double) attendedTimeMinutes / totalMeetingTimeMinutes) * 100;
+
+        if (attendancePercentage >= 75) {
+            employee.setAttendanceStatus("Present");
+        } else {
+            employee.setAttendanceStatus("Absent");
+        }
+
+        employeeRepository.save(employee);
+    }
 }
-
-
