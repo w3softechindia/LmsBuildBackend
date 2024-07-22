@@ -1,11 +1,14 @@
 package com.example.main.service;
 
 import java.util.List;
+import java.nio.file.Path;
+
 import java.util.Set;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
-import com.example.main.entity.Sessions;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
 import com.example.main.entity.Team;
@@ -37,6 +40,10 @@ public interface EmployeeService {
 	public void markSessionAsAttended(int classId);	
 	
 	public Team getTeamByEmployeeIdd (String employeeId) throws Exception;
+	
+	public void uploadTaskFile(String taskId, MultipartFile file);
+	
+	public Path getTaskFile(String taskId);
 		
 }
 
