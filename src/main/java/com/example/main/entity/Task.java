@@ -24,6 +24,7 @@ public class Task {
     private String startDate;
     private String endDate;
     private String status;
+    private String fileName;
     
     @ManyToOne
     @JoinColumn(name = "teamName")

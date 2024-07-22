@@ -1,13 +1,17 @@
 package com.example.main.serviceImplementation;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
@@ -47,9 +51,9 @@ public class EmployeeImpl implements EmployeeService {
 	@Autowired
 	private SessionRepository sessionRepository;
 
-	@SuppressWarnings("unused")
-	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB
-	String uploadDir = "E:\\LMS_Backup_Folder\\Picture";
+
+	 private final Path tempLocation = Paths.get("E:\\LMS_Backup_Folder\\TaskFiles");
+	    private final Path finalLocation = Paths.get("E:\\LMS_Backup_Folder\\TaskFiles");
 
 	@Override
 	public Employee getEmployeeDetails(String employeeId) throws Exception {
@@ -187,7 +191,67 @@ public class EmployeeImpl implements EmployeeService {
 		return employee.getTeam();
 	}
 
-}
+	@Override
+	public void uploadTaskFile(String taskId, MultipartFile file) {
+		  try {
+	            if (file.isEmpty()) {
+	                throw new RuntimeException("Failed to store empty file.");
+	            }
+
+	            // Create the temporary directory if it doesn't exist
+	            if (!Files.exists(tempLocation)) {
+	                Files.createDirectories(tempLocation);
+	            }
+
+	            // Store the file in the temporary directory
+	            Path tempFile = tempLocation.resolve(Paths.get(file.getOriginalFilename()))
+	                .normalize()
+	                .toAbsolutePath();
+
+	            Files.copy(file.getInputStream(), tempFile);
+
+	            // Create the final directory if it doesn't exist
+	            if (!Files.exists(finalLocation)) {
+	                Files.createDirectories(finalLocation);
+	            }
+
+	            // Move the file to the final directory
+	            Path finalFile = finalLocation.resolve(Paths.get(file.getOriginalFilename()))
+	                .normalize()
+	                .toAbsolutePath();
+
+	            Files.move(tempFile, finalFile);
+
+	            // Update the task entity with the file name
+	            Task task = taskRepository.findById(taskId)
+	                .orElseThrow(() -> new RuntimeException("Task not found"));
+	            task.setFileName(file.getOriginalFilename());
+	            taskRepository.save(task);
+
+	        } catch (IOException e) {
+	            throw new RuntimeException("Failed to store file.", e);
+	        }
+	    }
+
+	@Override
+	public Path getTaskFile(String taskId) {
+		 Optional<Task> optionalTask = taskRepository.findById(taskId);
+	        if (optionalTask.isPresent()) {
+	            Task task = optionalTask.get();
+	            Path filePath = this.finalLocation.resolve(task.getFileName()).normalize();
+	            if (Files.exists(filePath)) {
+	                return filePath;
+	            } else {
+	                throw new RuntimeException("File not found");
+	            }
+	        } else {
+	            throw new RuntimeException("Task not found");
+	        }
+	    }
+		
+	}
+
+
 
 //	@Override
 //	public SubCourse updateSubCourseProgress(String subCourseName, int progress) {
