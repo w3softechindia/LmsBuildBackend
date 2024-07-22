@@ -2,12 +2,14 @@ package com.example.main.entity;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,6 +20,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +30,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Employee implements UserDetails{
+public class Employee implements UserDetails {
 	/**
 	 * 
 	 */
@@ -45,26 +48,34 @@ public class Employee implements UserDetails{
 	private String imagePath;
 	private String dateOfJoin;
 	private String status;
-	
-	
+	private String attendanceStatus;
+
 	@Column(name = "image_bytes", columnDefinition = "LONGBLOB")
 	private byte[] imageBytes;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "Employee_Roles",joinColumns = {@JoinColumn(name="Employee_Id")},inverseJoinColumns = {@JoinColumn(name="Role_Name")})
+	@JoinTable(name = "Employee_Roles", joinColumns = { @JoinColumn(name = "Employee_Id") }, inverseJoinColumns = {
+			@JoinColumn(name = "Role_Name") })
 	private Set<Role> roles = new HashSet<>();
-	
+
 	@ManyToOne
 	@JsonBackReference
 	private Team team;
-	
+
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonManagedReference
+	private Set<Attendance> attendances = new HashSet<>();
+
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Sessions> sessions = new HashSet<>();
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<Authority> authorities = new HashSet<>();
-		 this.roles.forEach(userRole->{
-			 authorities.add(new Authority("ROLE_"+userRole.getRoleName()));
-		 });
-	        return authorities;
+		this.roles.forEach(userRole -> {
+			authorities.add(new Authority("ROLE_" + userRole.getRoleName()));
+		});
+		return authorities;
 	}
 
 	@Override
@@ -72,7 +83,7 @@ public class Employee implements UserDetails{
 		// TODO Auto-generated method stub
 		return this.employeeId;
 	}
-	
+
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
