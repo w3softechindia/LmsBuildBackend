@@ -190,6 +190,13 @@ public class EmployeeController {
 //	}
 	
 //	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+//	@PostMapping("/uploadTaskFile/{taskId}")
+//	public String uploadTaskFile(@PathVariable("taskId") String taskId, @RequestParam("file") MultipartFile file) {
+//	    employeeService.uploadTaskFile(taskId, file);
+//	    return "File uploaded successfully";
+//	}
+	
+//	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 //	@PutMapping("/updateSubCourseProgress/{subCourseName}/{progress}")
 //	public ResponseEntity<SubCourse> updateSubCourseProgress(@PathVariable String subCourseName,
 //			@PathVariable int progress) {
