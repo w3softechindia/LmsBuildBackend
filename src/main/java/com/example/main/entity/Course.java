@@ -18,6 +18,8 @@ public class Course {
 	@Id
 	private String courseName;
 	private int courseDuration;
+	private int progress;
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "course")
 	private List<SubCourse> subCourses;
 }

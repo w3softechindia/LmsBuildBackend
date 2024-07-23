@@ -216,33 +216,34 @@ public class TeamLeadController {
 //        return ResponseEntity.ok(attendance);
 //	}
 	
-	@PreAuthorize("hasRole('TeamLead')")
-	@PostMapping("/saveAttendance/{classId}/{startTime}/{endTime}/{employeeId}")
-    public ResponseEntity<Attendance> createAttendance(@PathVariable int classId,
-                                                       @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
-                                                       @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
-                                                       @PathVariable String employeeId) {
-        try {
-            Attendance attendance = teamLeadService.createAttendance(classId, employeeId, startTime, endTime);
-            return ResponseEntity.ok(attendance);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-	
-	@PreAuthorize("hasRole('TeamLead')")
-	@GetMapping("/getAttendance/{employeeId}")
-	public ResponseEntity<Set<Attendance>> getAttendance(@PathVariable String employeeId) throws Exception{
-		Set<Attendance> attendance = teamLeadService.getAttendance(employeeId);
-		return ResponseEntity.ok(attendance);
-		
-	}
-	
-	@PreAuthorize("hasRole('TeamLead')")
-	 @PostMapping("/updateAttendanceStatus/{employeeId}")
-	    public void updateAttendanceStatus(@PathVariable String employeeId) {
-	        teamLeadService.updateEmployeeAttendanceStatus(employeeId);
-	    }
+
+//	@PreAuthorize("hasRole('TeamLead')")
+//	@PostMapping("/saveAttendance/{classId}/{startTime}/{endTime}/{employeeId}")
+//    public ResponseEntity<Attendance> createAttendance(@PathVariable int classId,
+//                                                       @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+//                                                       @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
+//                                                       @PathVariable String employeeId) {
+//        try {
+//            Attendance attendance = teamLeadService.createAttendance(classId, employeeId, startTime, endTime);
+//            return ResponseEntity.ok(attendance);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+//	
+//	@PreAuthorize("hasRole('TeamLead')")
+//	@GetMapping("/getAttendance/{employeeId}")
+//	public ResponseEntity<Set<Attendance>> getAttendance(@PathVariable String employeeId) throws Exception{
+//		Set<Attendance> attendance = teamLeadService.getAttendance(employeeId);
+//		return ResponseEntity.ok(attendance);
+//		
+//	}
+//	
+//	@PreAuthorize("hasRole('TeamLead')")
+//	 @PostMapping("/updateAttendanceStatus/{employeeId}")
+//	    public void updateAttendanceStatus(@PathVariable String employeeId) {
+//	        teamLeadService.updateEmployeeAttendanceStatus(employeeId);
+//	    }
 	
 //	@PreAuthorize("hasRole('TeamLead')")
 //	@GetMapping("/getTasksByTeamLead/{employeeId}")

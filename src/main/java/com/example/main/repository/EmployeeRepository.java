@@ -1,6 +1,7 @@
 package com.example.main.repository;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +30,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 	Optional<Employee> findByTeamTeamName(String employeeId);
 
 	}
+
+    List<Employee> findByRoles_RoleNameNotAndStatus(String roleName, String status);
+
+}
 
