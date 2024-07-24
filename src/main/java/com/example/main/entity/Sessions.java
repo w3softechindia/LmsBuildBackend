@@ -37,9 +37,6 @@ public class Sessions {
 	@JsonBackReference
 	private SubCourse subCourse;
 
-	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonManagedReference
-	private List<Attendance> attendances;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id")

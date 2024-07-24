@@ -3,6 +3,7 @@ package com.example.main.serviceImplementation;
 import java.io.IOException;
 
 
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.main.entity.Attendance;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Role;
@@ -27,7 +27,6 @@ import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
 import com.example.main.entity.Team;
 import com.example.main.exception.ResourceNotFound;
-import com.example.main.repository.AttendanceRepository;
 import com.example.main.repository.CourseRepository;
 import com.example.main.repository.EmployeeRepository;
 import com.example.main.repository.SessionRepository;
