@@ -18,5 +18,7 @@ public interface TeamRepository extends JpaRepository<Team, String> {
 	@Query("SELECT DISTINCT team.course FROM Team team JOIN team.employee e WHERE e.employeeId = :employeeId")
 	List<Course> findCoursesByEmployeeId(@Param("employeeId") String employeeId);
 
+	public Team findByTeamName(String teamName);
+
 
 }

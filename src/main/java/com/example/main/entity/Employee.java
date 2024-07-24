@@ -1,6 +1,7 @@
 package com.example.main.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Employee implements UserDetails{
+public class Employee implements UserDetails {
 	/**
 	 * 
 	 */
@@ -45,26 +46,29 @@ public class Employee implements UserDetails{
 	private String imagePath;
 	private String dateOfJoin;
 	private String status;
-	
-	
+
 	@Column(name = "image_bytes", columnDefinition = "LONGBLOB")
 	private byte[] imageBytes;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "Employee_Roles",joinColumns = {@JoinColumn(name="Employee_Id")},inverseJoinColumns = {@JoinColumn(name="Role_Name")})
+	@JoinTable(name = "Employee_Roles", joinColumns = { @JoinColumn(name = "Employee_Id") }, inverseJoinColumns = {
+			@JoinColumn(name = "Role_Name") })
 	private Set<Role> roles = new HashSet<>();
-	
+
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value = "team-employees")
 	private Team team;
-	
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	private Set<Sessions> sessions;
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<Authority> authorities = new HashSet<>();
-		 this.roles.forEach(userRole->{
-			 authorities.add(new Authority("ROLE_"+userRole.getRoleName()));
-		 });
-	        return authorities;
+		this.roles.forEach(userRole -> {
+			authorities.add(new Authority("ROLE_" + userRole.getRoleName()));
+		});
+		return authorities;
 	}
 
 	@Override
@@ -72,7 +76,7 @@ public class Employee implements UserDetails{
 		// TODO Auto-generated method stub
 		return this.employeeId;
 	}
-	
+
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
