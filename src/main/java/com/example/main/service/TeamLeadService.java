@@ -1,16 +1,13 @@
 package com.example.main.service;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.main.entity.Attendance;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
-import com.example.main.entity.Sessions;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
 import com.example.main.entity.Team;
@@ -54,7 +51,7 @@ public interface TeamLeadService {
 //    public Set<Attendance> getAttendance(String employeeId) throws Exception;
 //    
 //    public void updateEmployeeAttendanceStatus(String employeeId);
-//	
+
 //	public List<Team> getTeamsByTeamLead(String employeeId);
 	
 //	public long getTotalCoursesByTeamLead(String employeeId) throws Exception;
