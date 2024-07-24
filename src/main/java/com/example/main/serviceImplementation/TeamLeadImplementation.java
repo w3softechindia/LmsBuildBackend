@@ -48,12 +48,9 @@ public class TeamLeadImplementation implements TeamLeadService {
 
 	@Autowired
 	private TaskRepository taskRepository;
-
-//	@Autowired
-//	private AttendanceRepository attendanceRepository;
-//
-//	@Autowired
-//	private SessionRepository sessionRepository;
+  
+	@Autowired
+	private SessionRepository sessionRepository;
 
 	@SuppressWarnings("unused")
 	private static final int MAX_IMAGE_SIZE = 1024 * 1024; // Example: 1 MB

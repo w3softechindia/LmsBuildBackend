@@ -17,8 +17,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 
 	Employee findByEmployeeId(String employeeId);
 
-	@Query("DELETE FROM Employee e WHERE e.team.teamName = :teamName")
-	void deleteByTeamTeamName(@Param("teamName") String teamName);
+//	@Query("DELETE FROM Employee e WHERE e.team.teamName = :teamName")
+//	void deleteByTeamTeamName(@Param("teamName") String teamName);
 
 	List<Employee> findByRolesRoleNameNot(String roleName);
 
@@ -26,8 +26,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 
   List<Employee> findByRoles_RoleNameAndStatus(String roleName, String status);
 
-    List<Employee> findByRoles_RoleNameNotAndStatus(String roleName, String status);
-
+  List<Employee> findByRoles_RoleNameNotAndStatus(String roleName, String status);
 }
 
 

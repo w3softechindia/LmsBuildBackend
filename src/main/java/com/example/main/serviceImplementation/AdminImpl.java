@@ -412,6 +412,49 @@ Optional<Course> course = courseRepository.findById(courseId);
 			}
 
 		}
+		
+		
+//		@Override
+//		public Boolean checkEmail(String email) {
+//		boolean result = employeeRepository.existsByEmployeeEmail(email);
+//		return result;
+//		}
+//		@Override
+//		public Boolean checkWebMail(String webMail) {
+//		boolean result = employeeRepository.existsByWebMail(webMail);
+//		return result;
+//		}
+//		@Override
+//		public Boolean checkPhoneNumber(long phoneNumber) {
+//		boolean result = employeeRepository.existsByPhoneNumber(phoneNumber);
+//		return result;
+//		}
+//
+//		
+//		   @Override
+//		   public List<String> getAllEmployeeEmails() {
+//		        return employeeRepository.findAllEmployeeEmails();
+//		    }
+//		   @Override
+//		    public List<String> getAllWebMails() {
+//		        return employeeRepository.findAllWebMails();
+//		    }
+//		    @Override
+//		    public List<Long> getAllPhoneNumbers() {
+//		        return employeeRepository.findAllPhoneNumbers();
+//		    }
+//
+//			@Override
+//			public Boolean checkEmailToUpdate(String employeeId,String email) {
+//				return employeeRepository.existsByEmailAndNotEmployeeId(email, employeeId);
+//				
+//			}
+//
+//			@Override
+//			public Boolean checkPhoneNumberToUpdate(String employeeId,long phoneNumber) {
+//				 return employeeRepository.existsByPhoneNumberAndNotEmployeeId(phoneNumber, employeeId);
+//
+//			}
 
 	}
 

@@ -51,8 +51,7 @@ public interface TeamLeadService {
 //    public Set<Attendance> getAttendance(String employeeId) throws Exception;
 //    
 //    public void updateEmployeeAttendanceStatus(String employeeId);
-	
-	
+
 //	public List<Team> getTeamsByTeamLead(String employeeId);
 	
 //	public long getTotalCoursesByTeamLead(String employeeId) throws Exception;

@@ -27,5 +27,9 @@ public class Sessions {
 	@ManyToOne
 	@JsonBackReference
 	private SubCourse subCourse;
-	
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "employee_id")
+	@JsonBackReference
+	private Employee employee;
 }
