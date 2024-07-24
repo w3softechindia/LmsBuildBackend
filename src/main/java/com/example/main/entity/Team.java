@@ -38,8 +38,6 @@ public class Team {
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
 	@JsonManagedReference
-	@JsonIgnore
 	private List<Task> task;
-	
 
 }
