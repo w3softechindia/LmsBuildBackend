@@ -254,7 +254,6 @@ public class EmployeeImpl implements EmployeeService {
 	public Sessions createSession(Sessions session) {
 		// Assign session to all employees in the team
 		Team team = session.getTeam();
-		String meetingLink = team.getMeetingLink();
 		if (team != null && team.getEmployee() != null) {
 			session = sessionRepository.save(session);
 			for (Employee employee : team.getEmployee()) {
