@@ -289,7 +289,6 @@ public class EmployeeImpl implements EmployeeService {
 		// Get the current time
 		LocalDateTime now = LocalDateTime.now();
 
-		// Define time window (5 minutes before and after)
 		long windowMinutes = 5;
 
 		// Convert sessions to DTOs including the meeting link and time check
