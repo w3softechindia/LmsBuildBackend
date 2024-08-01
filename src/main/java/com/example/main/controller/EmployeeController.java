@@ -131,7 +131,7 @@ public class EmployeeController {
 		return ResponseEntity.ok("Session marked as attended");
 	}
 
-	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@PreAuthorize("hasAnyRole('Developer', 'Tester','TeamLead')")
 	@GetMapping("/getTeamByEmployeeId/{employeeId}")
 	public ResponseEntity<Team> getTeamByEmployeeIdd(@PathVariable String employeeId) throws Exception {
 		Team team = employeeService.getTeamByEmployeeIdd(employeeId);
@@ -280,9 +280,6 @@ public class EmployeeController {
 	        EmployeeMeetingRecord recordDTO = employeeService.getMeetingRecord(employeeId, meetingLink);
 	        return ResponseEntity.ok(recordDTO);
 	    }
-	
-	
-	
 }
 
 class StartSessionRequest {
