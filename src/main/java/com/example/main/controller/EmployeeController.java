@@ -276,7 +276,7 @@ public class EmployeeController {
 		EmployeeMeetingRecord recordDTO = employeeService.getMeetingRecord(employeeId, meetingLink);
 		return ResponseEntity.ok(recordDTO);
 	}
-
+  
 	class StartSessionRequest {
 		private LocalDateTime startTime;
 		private int sessionNumber;
