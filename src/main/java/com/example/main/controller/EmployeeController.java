@@ -276,6 +276,42 @@ public class EmployeeController {
 		EmployeeMeetingRecord recordDTO = employeeService.getMeetingRecord(employeeId, meetingLink);
 		return ResponseEntity.ok(recordDTO);
 	}
+
+	@PreAuthorize("hasAnyRole('TeamLead')")
+	 @PutMapping("/updateSession/{id}")
+    public ResponseEntity<Sessions> updateSession(@PathVariable("id") int id, @RequestBody Sessions updatedSession) throws Exception {
+        Sessions session = employeeService.updateSession(id, updatedSession);
+        if (session != null) {
+            return ResponseEntity.ok(session);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+}
+
+class StartSessionRequest {
+	private LocalDateTime startTime;
+	private int sessionNumber;
+
+	// Getters and setters
+	public LocalDateTime getStartTime() {
+		return startTime;
+	}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+		}
+	}
+
+	@PreAuthorize("hasAnyRole('TeamLead')")
+	@GetMapping("/getMeetingRecord")
+	public ResponseEntity<EmployeeMeetingRecord> getMeetingRecord(@RequestParam String employeeId,
+			@RequestParam String meetingLink) {
+		EmployeeMeetingRecord recordDTO = employeeService.getMeetingRecord(employeeId, meetingLink);
+		return ResponseEntity.ok(recordDTO);
+	}
   
 	class StartSessionRequest {
 		private LocalDateTime startTime;

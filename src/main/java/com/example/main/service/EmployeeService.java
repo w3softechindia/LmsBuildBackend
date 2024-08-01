@@ -64,5 +64,7 @@ public interface EmployeeService {
 	public Sessions findByMeetingLink(String meetingLink);
 
 	public EmployeeMeetingRecord getMeetingRecord(String employeeId, String meetingLink);
+	
+	public Sessions updateSession(int id, Sessions updatedSession) throws Exception;
 
 }
