@@ -260,7 +260,6 @@ public class EmployeeImpl implements EmployeeService {
 			for (Employee employee : team.getEmployee()) {
 				employee.getSessions().add(session);
 				employeeRepository.save(employee);
-
 			}
 
 		}
