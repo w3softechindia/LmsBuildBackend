@@ -269,13 +269,7 @@ public class EmployeeController {
 		}
 	}
 
-	@PreAuthorize("hasAnyRole('TeamLead')")
-	@GetMapping("/getMeetingRecord")
-	public ResponseEntity<EmployeeMeetingRecord> getMeetingRecord(@RequestParam String employeeId,
-			@RequestParam String meetingLink) {
-		EmployeeMeetingRecord recordDTO = employeeService.getMeetingRecord(employeeId, meetingLink);
-		return ResponseEntity.ok(recordDTO);
-	}
+
 
 	@PreAuthorize("hasAnyRole('TeamLead')")
 	 @PutMapping("/updateSession/{id}")
@@ -287,51 +281,16 @@ public class EmployeeController {
             return ResponseEntity.notFound().build();
         }
     }
+		
 
-}
 
-class StartSessionRequest {
-	private LocalDateTime startTime;
-	private int sessionNumber;
-
-	// Getters and setters
-	public LocalDateTime getStartTime() {
-		return startTime;
-	}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-		}
-	}
 
 	@PreAuthorize("hasAnyRole('TeamLead')")
 	@GetMapping("/getMeetingRecord")
-	public ResponseEntity<EmployeeMeetingRecord> getMeetingRecord(@RequestParam String employeeId,
-			@RequestParam String meetingLink) {
+	public ResponseEntity<EmployeeMeetingRecord> getMeetingRecord(@RequestParam String employeeId, @RequestParam String meetingLink) {
 		EmployeeMeetingRecord recordDTO = employeeService.getMeetingRecord(employeeId, meetingLink);
 		return ResponseEntity.ok(recordDTO);
 	}
   
-	class StartSessionRequest {
-		private LocalDateTime startTime;
-		private int sessionNumber;
-
-		// Getters and setters
-		public LocalDateTime getStartTime() {
-			return startTime;
-		}
-
-		public void setStartTime(LocalDateTime startTime) {
-			this.startTime = startTime;
-		}
-
-		public int getSessionNumber() {
-			return sessionNumber;
-		}
-
-		public void setSessionNumber(int sessionNumber) {
-			this.sessionNumber = sessionNumber;
-		}
-	}
+	
 }
