@@ -254,12 +254,12 @@ public class EmployeeImpl implements EmployeeService {
 	public Sessions createSession(Sessions session) {
 		// Assign session to all employees in the team
 		Team team = session.getTeam();
+		String meetingLink = team.getMeetingLink();
 		if (team != null && team.getEmployee() != null) {
 			session = sessionRepository.save(session);
 			for (Employee employee : team.getEmployee()) {
 				employee.getSessions().add(session);
 				employeeRepository.save(employee);
-
 			}
 
 		}
@@ -318,7 +318,7 @@ public class EmployeeImpl implements EmployeeService {
 		record.setSession(session);
 		record.setJoinTime(LocalDateTime.now());
 		record.getJoinTime();
-        record.getLeaveTime();
+		record.getLeaveTime();
 		recordRepository.save(record);
 	}
 
@@ -343,17 +343,13 @@ public class EmployeeImpl implements EmployeeService {
 	}
 
 	@Override
-	 public EmployeeMeetingRecord getMeetingRecord(String employeeId, String meetingLink) {
-        EmployeeMeetingRecord record = recordRepository.findByEmployeeEmployeeIdAndSessionMeetingLink(employeeId, meetingLink);
-        if (record == null) {
-            throw new RuntimeException("Meeting record not found");
-        }
-        return new EmployeeMeetingRecord(
-            record.getId(),
-            record.getEmployee(),
-            record.getSession(),
-            record.getJoinTime(),
-            record.getLeaveTime()
-        );
-    }
+	public EmployeeMeetingRecord getMeetingRecord(String employeeId, String meetingLink) {
+		EmployeeMeetingRecord record = recordRepository.findByEmployeeEmployeeIdAndSessionMeetingLink(employeeId,
+				meetingLink);
+		if (record == null) {
+			throw new RuntimeException("Meeting record not found");
+		}
+		return new EmployeeMeetingRecord(record.getId(), record.getEmployee(), record.getSession(),
+				record.getJoinTime(), record.getLeaveTime());
+	}
 }

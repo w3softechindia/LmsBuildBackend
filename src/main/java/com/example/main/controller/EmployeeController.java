@@ -277,12 +277,111 @@ public class EmployeeController {
 		return ResponseEntity.ok(recordDTO);
 	}
 
+	@PreAuthorize("hasAnyRole('Developer', 'Tester','TeamLead')")
+	@GetMapping("/countSessions")
+	public long countSessions() {
+		return employeeService.countSessions();
+	}
+  
+	@PreAuthorize("hasAnyRole('Developer', 'Tester','TeamLead')")
+	@GetMapping("/getAllSessions")
+	public List<Sessions> getAllSessions() {
+		return employeeService.getAllSessions();
+	}
+
+	@PreAuthorize("hasAnyRole('TeamLead')")
+	@PostMapping("/createSession")
+	public ResponseEntity<Sessions> createSession(@RequestBody Sessions session) {
+		Sessions session2 = employeeService.createSession(session);
+		return ResponseEntity.ok(session2);
+	}
+
+	@PreAuthorize("hasAnyRole('Developer', 'Tester','TeamLead')")
+	@GetMapping("/getSessionsByTeamName/{teamName}")
+	public ResponseEntity<List<SessionsDTO>> getSessionsByTeamName(@PathVariable String teamName) {
+		List<SessionsDTO> sessions = employeeService.getSessionsByTeamName(teamName);
+		return ResponseEntity.ok(sessions);
+	}
+
+	@PreAuthorize("hasAnyRole('TeamLead')")
+	@PostMapping("/recordJoinTime")
+	public ResponseEntity<String> recordJoinTime(@RequestParam String employeeId, @RequestParam String meetingLink) {
+	    try {
+	        // Log input values
+	        System.out.println("Employee ID: " + employeeId);
+	        System.out.println("Meeting Link: " + meetingLink);
+
+	        // Optionally, decode the meetingLink if needed
+	        // String decodedMeetingLink = URLDecoder.decode(meetingLink, "UTF-8");
+
+	        // Fetch employee entity
+	        Employee employee = employeeService.findById(employeeId);
+
+	        // Fetch session by meeting link
+	        Sessions session = employeeService.findByMeetingLink(meetingLink);
+
+	        if (employee != null && session != null) {
+	            employeeService.recordJoinTime(employee, session);
+	            return ResponseEntity.ok("Join time recorded successfully.");
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee or Session not found");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request");
+	    }
+	}
+
+
+
+
+
+	 @PreAuthorize("hasAnyRole('TeamLead')")
+	    @PostMapping("/recordLeaveTime")
+	    public ResponseEntity<String> recordLeaveTime(@RequestParam String employeeId, @RequestParam String meetingLink) {
+	        try {
+	            // Log the received parameters
+	            System.out.println("Received employeeId: " + employeeId);
+	            System.out.println("Received meetingLink: " + meetingLink);
+
+	            // Decode the meetingLink if necessary
+	            String decodedMeetingLink = java.net.URLDecoder.decode(meetingLink, "UTF-8");
+
+	            // Fetch employee and session
+	            Employee employee = employeeService.findById(employeeId);
+	            Sessions session = employeeService.findByMeetingLink(decodedMeetingLink);
+
+	            if (employee == null) {
+	                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found");
+	            }
+
+	            if (session == null) {
+	                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Session not found");
+	            }
+
+	            // Record leave time
+	            employeeService.recordLeaveTime(employee, session);
+	            return ResponseEntity.ok("Leave time recorded successfully");
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+	        }
+	    }
+	
+	 
+	 @PreAuthorize("hasAnyRole('TeamLead')")
+	    @GetMapping("/getMeetingRecord")
+	    public ResponseEntity<EmployeeMeetingRecord> getMeetingRecord(@RequestParam String employeeId, @RequestParam String meetingLink) {
+	        EmployeeMeetingRecord recordDTO = employeeService.getMeetingRecord(employeeId, meetingLink);
+	        return ResponseEntity.ok(recordDTO);
+	    }
 }
 
 class StartSessionRequest {
 	private LocalDateTime startTime;
 	private int sessionNumber;
-
+  
 	// Getters and setters
 	public LocalDateTime getStartTime() {
 		return startTime;

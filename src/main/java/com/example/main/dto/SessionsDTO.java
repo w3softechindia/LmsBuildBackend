@@ -18,6 +18,6 @@ public class SessionsDTO {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private int sessionNumber;
-    private String meetingLink;  
+    private String meetingLink;  // Include meeting link here
     private String timeStatus;
 }

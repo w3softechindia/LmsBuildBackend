@@ -156,12 +156,14 @@ public class TeamLeadImplementation implements TeamLeadService {
 	public Team updateTeam(String teamName, Team updatedTeam) throws Exception {
 		Team existingTeam = teamRepository.findById(teamName)
 				.orElseThrow(() -> new ResourceNotFound("Team with name " + teamName + " not found"));
+		existingTeam.setMeetingLink(updatedTeam.getMeetingLink());
 		if (updatedTeam.getCourse() != null && !updatedTeam.getCourse().isEmpty()) {
 			Course newCourse = updatedTeam.getCourse().iterator().next();
 			Course foundCourse = courseRepository.findById(newCourse.getCourseName()).orElseThrow(
 					() -> new ResourceNotFound("Course with name " + newCourse.getCourseName() + " not found"));
 			Set<Course> updatedCourses = new HashSet<>();
 			updatedCourses.add(foundCourse);
+			
 			existingTeam.setCourse(updatedCourses);
 		}
 		if (updatedTeam.getEmployee() != null) {
