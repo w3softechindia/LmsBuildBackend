@@ -11,13 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SessionsDTO {
-    private int classId;
-    private int classDuration;
-    private LocalDate classDate;
-    private String classStatus;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private int sessionNumber;
-    private String meetingLink;  
-    private String timeStatus;
+	 private int classId;
+	    private int classDuration;
+	    private LocalDate classDate;
+	    private String classStatus;
+	    private LocalDateTime startTime;
+	    private LocalDateTime endTime;
+	    private int sessionNumber;
+	    private String meetingLink;
+	    private String timeStatus;
+    
 }

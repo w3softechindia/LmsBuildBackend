@@ -1,13 +1,17 @@
 package com.example.main.serviceImplementation;
 
 import java.io.IOException;
+import java.time.LocalDate;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,9 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.main.dto.SessionsDTO;
 import com.example.main.entity.Course;
 import com.example.main.entity.Employee;
 import com.example.main.entity.Role;
+import com.example.main.entity.Sessions;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
 import com.example.main.entity.Team;
@@ -320,6 +326,52 @@ public class TeamLeadImplementation implements TeamLeadService {
 		List<Task> list = taskRepository.findByTeam_TeamName(teamName);
 		return list;
 	}
+	
+	
+	@Override
+    public List<Sessions> createSessions(String teamName, String subCourseName, int numberOfSessions, List<LocalDate> dates, SessionsDTO sessionDTO) {
+        Optional<Team> teamOptional = teamRepository.findById(teamName);
+        if (teamOptional.isEmpty()) {
+            throw new IllegalArgumentException("Team not found: " + teamName);
+        }
+
+        Team team = teamOptional.get();
+
+        // Fetch the SubCourse based on subCourseName
+        Optional<SubCourse> subCourseOptional = subCourseRepository.findById(subCourseName);
+        if (subCourseOptional.isEmpty()) {
+            throw new IllegalArgumentException("SubCourse not found: " + subCourseName);
+        }
+
+        SubCourse subCourse = subCourseOptional.get();
+
+        if (dates.size() != numberOfSessions) {
+            throw new IllegalArgumentException("Number of dates does not match the number of sessions");
+        }
+
+        List<Sessions> sessionsList = new ArrayList<>();
+        for (int i = 0; i < numberOfSessions; i++) {
+            Sessions session = new Sessions();
+            session.setClassDate(dates.get(i));
+            session.setStartTime(sessionDTO.getStartTime());
+            session.setEndTime(sessionDTO.getEndTime());
+
+            // Calculate class duration based on start and end time
+            Duration duration = Duration.between(sessionDTO.getStartTime(), sessionDTO.getEndTime());
+            int classDuration = (int) duration.toMinutes();
+            session.setClassDuration(classDuration);
+
+            session.setMeetingLink(sessionDTO.getMeetingLink());
+            session.setClassStatus(sessionDTO.getClassStatus());
+            session.setSessionNumber(i + 1); // Set session number starting from 1
+            session.setTeam(team);
+            session.setSubCourse(subCourse);
+
+            sessionsList.add(session);
+        }
+
+        return sessionRepository.saveAll(sessionsList);
+    }
 
 //	@Override
 //	public Attendance createAttendance(int classId, String employeeId, LocalDateTime startTime, LocalDateTime endTime) throws Exception {
