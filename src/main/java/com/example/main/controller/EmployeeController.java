@@ -271,32 +271,6 @@ public class EmployeeController {
 	}
 
 
-<<<<<<< HEAD
-
-	@PreAuthorize("hasAnyRole('TeamLead')")
-	 @PutMapping("/updateSession/{id}")
-    public ResponseEntity<Sessions> updateSession(@PathVariable("id") int id, @RequestBody Sessions updatedSession) throws Exception {
-        Sessions session = employeeService.updateSession(id, updatedSession);
-        if (session != null) {
-            return ResponseEntity.ok(session);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-		
-
-
-
-	@PreAuthorize("hasAnyRole('TeamLead')")
-	@GetMapping("/getMeetingRecord")
-	public ResponseEntity<EmployeeMeetingRecord> getMeetingRecord(@RequestParam String employeeId, @RequestParam String meetingLink) {
-		EmployeeMeetingRecord recordDTO = employeeService.getMeetingRecord(employeeId, meetingLink);
-		return ResponseEntity.ok(recordDTO);
-	}
-  
-	
-}
-=======
 
 	@PreAuthorize("hasAnyRole('TeamLead')")
 	@PutMapping("/updateSession/{id}")
@@ -328,4 +302,3 @@ public class EmployeeController {
 //	}
 
 }
->>>>>>> refs/remotes/origin/main
