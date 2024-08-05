@@ -1,7 +1,7 @@
 package com.example.main.controller;
 
 import java.nio.file.Path;
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -279,6 +279,14 @@ public class EmployeeController {
 		// Getters and setters
 		public LocalDateTime getStartTime() {
 			return startTime;
+		}
+
+		public void setStartTime(LocalDateTime startTime) {
+			this.startTime = startTime;
+		}
+
+		public int getSessionNumber() {
+			return sessionNumber;
 		}
 
 		public void setSessionNumber(int sessionNumber) {
