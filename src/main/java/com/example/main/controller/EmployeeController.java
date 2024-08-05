@@ -96,7 +96,7 @@ public class EmployeeController {
 
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@PutMapping("/updateTaskStatus/{taskId}/{status}")
-	public ResponseEntity<Task> updateTaskStatus(@PathVariable String taskId, @PathVariable String status)
+	public ResponseEntity<Task>updateTaskStatus(@PathVariable String taskId, @PathVariable String status)
 			throws Exception {
 
 		Task updateTaskStatus = employeeService.updateTaskStatus(taskId, status);
@@ -145,25 +145,7 @@ public class EmployeeController {
 		employeeService.uploadTaskFile(taskId, file);
 		return "File uploaded successfully";
 	}
-
-//	  @PreAuthorize("hasAnyRole('Developer', 'Tester')")
-//	  @GetMapping("/getTaskFile/{taskId}")
-//	    public ResponseEntity<Resource> getTaskFile(@PathVariable String taskId) {
-//	        try {
-//	            Path filePath = employeeService.getTaskFile(taskId);
-//	            Resource resource = new UrlResource(filePath.toUri());
-//	            if (resource.exists() || resource.isReadable()) {
-//	                return ResponseEntity.ok()
-//	                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-//	                        .body(resource);
-//	            } else {
-//	                throw new RuntimeException("Could not read the file!");
-//	            }
-//	        } catch (Exception e) {
-//	            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//	        }
-//	    
-
+	    
 	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
 	@GetMapping("/getTaskFile/{taskId}")
 	public ResponseEntity<Resource> getTaskFile(@PathVariable String taskId) {
@@ -298,4 +280,33 @@ public class EmployeeController {
 			this.sessionNumber = sessionNumber;
 		}
 	}
+	@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+	@GetMapping("/getTotalTask")
+	public ResponseEntity<List<Task>> getTotalTask(){
+		List<Task> totalTask = employeeService.getTotalTask();
+		return ResponseEntity.ok(totalTask);
+		
+	}	
 }
+
+
+
+
+
+
+//@PreAuthorize("hasAnyRole('Developer', 'Tester')")
+//@GetMapping("/getTaskFile/{taskId}")
+//  public ResponseEntity<Resource> getTaskFile(@PathVariable String taskId) {
+//      try {
+//          Path filePath = employeeService.getTaskFile(taskId);
+//          Resource resource = new UrlResource(filePath.toUri());
+//          if (resource.exists() || resource.isReadable()) {
+//              return ResponseEntity.ok()
+//                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+//                      .body(resource);
+//          } else {
+//              throw new RuntimeException("Could not read the file!");
+//          }
+//      } catch (Exception e) {
+//          return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//      }

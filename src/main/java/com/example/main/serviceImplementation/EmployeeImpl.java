@@ -341,44 +341,48 @@ public class EmployeeImpl implements EmployeeService {
 	}
 
 	@Override
-	 public EmployeeMeetingRecord getMeetingRecord(String employeeId, String meetingLink) {
-        EmployeeMeetingRecord record = recordRepository.findByEmployeeEmployeeIdAndSessionMeetingLink(employeeId, meetingLink);
-        if (record == null) {
-            throw new RuntimeException("Meeting record not found");
-        }
-        return new EmployeeMeetingRecord(
-            record.getId(),
-            record.getEmployee(),
-            record.getSession(),
-            record.getJoinTime(),
-            record.getLeaveTime()
-        );
-    }
+	public EmployeeMeetingRecord getMeetingRecord(String employeeId, String meetingLink) {
+		EmployeeMeetingRecord record = recordRepository.findByEmployeeEmployeeIdAndSessionMeetingLink(employeeId,
+				meetingLink);
+		if (record == null) {
+			throw new RuntimeException("Meeting record not found");
+		}
+		return new EmployeeMeetingRecord(record.getId(), record.getEmployee(), record.getSession(),
+				record.getJoinTime(), record.getLeaveTime());
+	}
 
 	@Override
-	 public Sessions updateSession(int id, Sessions updatedSession) {
-        return sessionRepository.findById(id).map(existingSession -> {
-            existingSession.setClassDuration(updatedSession.getClassDuration());
-            existingSession.setClassDate(updatedSession.getClassDate());
-            existingSession.setClassStatus(updatedSession.getClassStatus());
-            existingSession.setStartTime(updatedSession.getStartTime());
-            existingSession.setEndTime(updatedSession.getEndTime());
-            existingSession.setSessionNumber(updatedSession.getSessionNumber());
-            existingSession.setMeetingLink(updatedSession.getMeetingLink());
+	public Sessions updateSession(int id, Sessions updatedSession) {
+		return sessionRepository.findById(id).map(existingSession -> {
+			existingSession.setClassDuration(updatedSession.getClassDuration());
+			existingSession.setClassDate(updatedSession.getClassDate());
+			existingSession.setClassStatus(updatedSession.getClassStatus());
+			existingSession.setStartTime(updatedSession.getStartTime());
+			existingSession.setEndTime(updatedSession.getEndTime());
+			existingSession.setSessionNumber(updatedSession.getSessionNumber());
+			existingSession.setMeetingLink(updatedSession.getMeetingLink());
 
-            // Update SubCourse if present
-            if (updatedSession.getSubCourse() != null) {
-                existingSession.setSubCourse(subCourseRepository.findById(updatedSession.getSubCourse().getSubCourseName()).orElse(null));
-            }
+			// Update SubCourse if present
+			if (updatedSession.getSubCourse() != null) {
+				existingSession.setSubCourse(
+						subCourseRepository.findById(updatedSession.getSubCourse().getSubCourseName()).orElse(null));
+			}
 
-            // Update Team if present
-            if (updatedSession.getTeam() != null) {
-                existingSession.setTeam(teamRepository.findById(updatedSession.getTeam().getTeamName()).orElse(null));
-            }
+			// Update Team if present
+			if (updatedSession.getTeam() != null) {
+				existingSession.setTeam(teamRepository.findById(updatedSession.getTeam().getTeamName()).orElse(null));
+			}
 
-            return sessionRepository.save(existingSession);
-        }).orElse(null);
-    }
+			return sessionRepository.save(existingSession);
+		}).orElse(null);
+	}
 
+	@Override
+	public List<Task> getTotalTask() {
+
+		List<Task> list = taskRepository.findAll();
+
+		return list;
+	}
 
 }

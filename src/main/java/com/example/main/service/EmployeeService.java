@@ -34,7 +34,9 @@ public interface EmployeeService {
 	public Task updateTaskStatus(String taskId, String status) throws Exception;
 
 //	public Course updateCourseProgress(String courseName, int progress);
-
+	
+	public List<Task> getTotalTask();
+	
 	public String getMeetingLinkByTeamName(String teamName) throws Exception;
 
 	public SubCourse getSubCourseBySubName(String subCourseName);
