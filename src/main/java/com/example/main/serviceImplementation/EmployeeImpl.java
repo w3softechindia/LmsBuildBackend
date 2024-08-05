@@ -381,55 +381,11 @@ public class EmployeeImpl implements EmployeeService {
 			return sessionRepository.save(existingSession);
 		}).orElse(null);
 	}
+	@Override
+	public List<Task> getTotalTask() {
 
-//	@Override
-//	public List<Sessions> createSessions(List<LocalDate> dates, Sessions sessionTemplate) {
-//		List<Sessions> createdSessions = new ArrayList<>();
-//		System.out.println("Dates: " + dates);
-//		System.out.println("Session Template: " + sessionTemplate);
-//
-//		Team team = sessionTemplate.getTeam();
-//		if (team != null && team.getEmployee() != null) {
-//			System.out.println("Team: " + team);
-//			int sessionNumber = 1;
-//			for (LocalDate date : dates) {
-//				Sessions newSession = new Sessions();
-//				newSession.setTeam(sessionTemplate.getTeam());
-//				newSession.setSubCourse(sessionTemplate.getSubCourse());
-//				newSession.setClassStatus(sessionTemplate.getClassStatus());
-//
-//				// Set start and end times by adjusting date
-//				LocalDateTime startTime = LocalDateTime.of(date, sessionTemplate.getStartTime().toLocalTime());
-//				LocalDateTime endTime = LocalDateTime.of(date, sessionTemplate.getEndTime().toLocalTime());
-//				newSession.setStartTime(startTime);
-//				newSession.setEndTime(endTime);
-//				newSession.setClassDate(date);
-//
-//				// Calculate class duration
-//				int duration = (int) java.time.Duration.between(startTime, endTime).toMinutes();
-//				newSession.setClassDuration(duration);
-//
-//				newSession.setSessionNumber(sessionNumber++);
-//				newSession.setMeetingLink(sessionTemplate.getMeetingLink());
-//
-//				// Save the session
-//				newSession = sessionRepository.save(newSession);
-//				for (Employee employee : team.getEmployee()) {
-//					if (employee.getSessions() == null) {
-//						employee.setSessions(new HashSet<>());
-//					}
-//					employee.getSessions().add(newSession);
-//					employeeRepository.save(employee);
-//				}
-//
-//				createdSessions.add(newSession);
-//			}
-//		} else {
-//			System.out.println("No employees found in the team.");
-//		}
-//
-//		System.out.println("Created Sessions: " + createdSessions);
-//		return createdSessions;
-//	}
+		List<Task> list = taskRepository.findAll();
 
+		return list;
+	}
 }
