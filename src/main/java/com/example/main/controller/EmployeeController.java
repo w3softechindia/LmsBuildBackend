@@ -288,7 +288,6 @@ public class EmployeeController {
 		public int getSessionNumber() {
 			return sessionNumber;
 		}
-
 		public void setSessionNumber(int sessionNumber) {
 			this.sessionNumber = sessionNumber;
 		}
