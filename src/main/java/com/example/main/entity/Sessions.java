@@ -23,6 +23,7 @@ public class Sessions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int classId;
+    
     private int classDuration;
     private LocalDate classDate;
     private String classStatus;

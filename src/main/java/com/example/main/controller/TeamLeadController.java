@@ -1,6 +1,7 @@
 package com.example.main.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,8 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.main.dto.CourseDto;
+import com.example.main.dto.SessionsDTO;
 import com.example.main.entity.Course;
+import com.example.main.entity.CreateSessionsRequest;
 import com.example.main.entity.Employee;
+import com.example.main.entity.Sessions;
 import com.example.main.entity.SubCourse;
 import com.example.main.entity.Task;
 import com.example.main.entity.Team;
@@ -50,7 +54,7 @@ public class TeamLeadController {
 		return ResponseEntity.ok(emp);
 	}
 
-	@PreAuthorize("hasRole('TeamLead')")
+	@PreAuthorize("hasAnyRole('Admin','TeamLead')")
 	@PostMapping("/addCourse")
 	public ResponseEntity<Course> addCourse(@RequestBody CourseDto courseDTO) {
 		try {
@@ -206,6 +210,19 @@ public class TeamLeadController {
 		return ResponseEntity.ok(list);
 	}
 	
+	 @PreAuthorize("hasRole('TeamLead')")
+	 @PostMapping("/createSessions/{teamName}/{subCourseName}/{numberOfSessions}")
+	 public ResponseEntity<List<Sessions>> createSessions(
+	         @PathVariable String teamName,
+	         @PathVariable String subCourseName,
+	         @PathVariable int numberOfSessions, 
+	         @RequestBody List<LocalDate> dates, 
+	         @RequestBody SessionsDTO sessionDTO) {
+
+	     List<Sessions> sessions = teamLeadService.createSessions(teamName, subCourseName, numberOfSessions, dates, sessionDTO);
+	     return ResponseEntity.ok(sessions);
+	 }
+	
 //	@PreAuthorize("hasRole('TeamLead')")
 //	@PostMapping("/saveAttendance/{classId}/{employeeId}/{startTime}/{endTime}")
 //	public ResponseEntity<Attendance> createAttendance(@PathVariable int classId,@PathVariable String employeeId, @PathVariable LocalDateTime startTime,@PathVariable LocalDateTime endTime) throws Exception  {
@@ -233,6 +250,7 @@ public class TeamLeadController {
 //		return ResponseEntity.ok(attendance);
 //		
 //	}
+	 
 //	
 //	@PreAuthorize("hasRole('TeamLead')")
 //	 @PostMapping("/updateAttendanceStatus/{employeeId}")

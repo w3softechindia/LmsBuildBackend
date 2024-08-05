@@ -68,5 +68,8 @@ public interface EmployeeService {
 	public EmployeeMeetingRecord getMeetingRecord(String employeeId, String meetingLink);
 	
 	public Sessions updateSession(int id, Sessions updatedSession) throws Exception;
+	
+//	List<Sessions> createSessions(List<java.time.LocalDate> dates, Sessions sessionTemplate);
+
 
 }

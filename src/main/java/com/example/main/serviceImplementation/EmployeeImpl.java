@@ -1,10 +1,15 @@
 package com.example.main.serviceImplementation;
 
 import java.io.IOException;
+
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -296,7 +301,7 @@ public class EmployeeImpl implements EmployeeService {
 			LocalDateTime startTime = session.getStartTime();
 			boolean isWithinTimeWindow = isWithinTimeWindow(now, startTime, windowMinutes);
 			return new SessionsDTO(session.getClassId(), session.getClassDuration(), session.getClassDate(),
-					session.getClassStatus(), session.getStartTime(), session.getEndTime(), session.getSessionNumber(),
+					session.getClassStatus(), session.getStartTime(), session.getEndTime(), session.getSessionNumber(), 
 					isWithinTimeWindow ? team.getMeetingLink() : null,
 					isWithinTimeWindow ? "Session is within time window" : "Time up" // Message based on time check
 			);
@@ -376,7 +381,6 @@ public class EmployeeImpl implements EmployeeService {
 			return sessionRepository.save(existingSession);
 		}).orElse(null);
 	}
-
 	@Override
 	public List<Task> getTotalTask() {
 
@@ -384,5 +388,4 @@ public class EmployeeImpl implements EmployeeService {
 
 		return list;
 	}
-
 }
