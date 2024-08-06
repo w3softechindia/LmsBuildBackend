@@ -149,7 +149,7 @@ public class TeamLeadController {
 		return ResponseEntity.ok(course);
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_TeamLead', 'ROLE_Developer', 'ROLE_Tester')")
+	@PreAuthorize("hasAnyRole('ROLE_TeamLead', 'ROLE_Developer', 'ROLE_Tester','ROLE_Admin')")
 	@PostMapping("/uploadPhoto/{employeeId}")
 	public ResponseEntity<String> uploadPhoto(@PathVariable String employeeId, @RequestParam("file") MultipartFile file)
 			throws Exception {
@@ -162,7 +162,7 @@ public class TeamLeadController {
 		}
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_TeamLead', 'ROLE_Developer', 'ROLE_Tester')")
+	@PreAuthorize("hasAnyRole('ROLE_TeamLead', 'ROLE_Developer', 'ROLE_Tester','ROLE_Admin')")
 	@GetMapping("/getPhoto/{employeeId}")
 	public ResponseEntity<ByteArrayResource> getPhoto(@PathVariable String employeeId) {
 		try {
@@ -180,7 +180,7 @@ public class TeamLeadController {
 		}
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_TeamLead', 'ROLE_Developer', 'ROLE_Tester')")
+	@PreAuthorize("hasAnyRole('ROLE_TeamLead', 'ROLE_Developer', 'ROLE_Tester','ROLE_Admin')")
 	@PutMapping("/updatePhoto/{employeeId}")
 	public ResponseEntity<?> updatePhoto(@PathVariable String employeeId, @RequestParam("photo") MultipartFile photo)
 			throws Exception {

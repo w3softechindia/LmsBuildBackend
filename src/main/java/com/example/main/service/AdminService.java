@@ -49,6 +49,19 @@ public interface AdminService {
 	void updatePhoto(String employeeId, MultipartFile photo) throws Exception;
 
 	void uploadPhoto(String employeeId, MultipartFile file) throws Exception;
+	List<String> getAllEmployeeEmails();
+
+	List<String> getAllWebMails();
+
+	List<Long> getAllPhoneNumbers();
+	public Boolean checkEmail(String email);
+
+	public Boolean checkWebMail(String webMail);
+
+	public Boolean checkPhoneNumber(long phoneNumber);
+	Boolean checkEmailToUpdate(String employeeId,String email);
+
+	Boolean checkPhoneNumberToUpdate(String employeeId,long phoneNumber);
 	
 	
 //	public Boolean checkEmail(String email);

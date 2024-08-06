@@ -235,6 +235,26 @@ public class AdminController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/AllEmails")
+	public List<String> getAllEmployeeEmails() {
+		return adminService.getAllEmployeeEmails();
+	}
+
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/AllWebMails")
+	public List<String> getAllWebmails() {
+		return adminService.getAllWebMails();
+	}
+
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/AllPhoneNumbers")
+	public List<Long> getAllPhoneNumbers() {
+		return adminService.getAllPhoneNumbers();
+	}
+
+
 	
 	
 //	@PreAuthorize("hasRole('Admin')")
@@ -289,5 +309,41 @@ public class AdminController {
 //    }
 
 	
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/checkEmail/{email}")
+	public ResponseEntity<Boolean> checkEmail(@PathVariable String email) {
+		Boolean result = adminService.checkEmail(email);
+		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/checkWebMail/{webMail}")
+	public ResponseEntity<Boolean> checkWebMail(@PathVariable String webMail) {
+		Boolean result = adminService.checkWebMail(webMail);
+		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/checkPhoneNumber/{phoneNumber}")
+	public ResponseEntity<Boolean> checkPhoneNumber(@PathVariable long phoneNumber) {
+		Boolean result = adminService.checkPhoneNumber(phoneNumber);
+		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/checkEmailToUpdate/{employeeId}/{email}")
+	public ResponseEntity<Boolean> checkEmailToUpdate(@PathVariable String employeeId, @PathVariable String email) {
+		Boolean result = adminService.checkEmailToUpdate(employeeId, email);
+		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasRole('Admin')")
+	@GetMapping("/checkPhoneNumberToUpdate/{employeeId}/{phoneNumber}")
+	public ResponseEntity<Boolean> checkPhoneNumberToUpdate(@PathVariable String employeeId,
+			@PathVariable long phoneNumber) {
+		Boolean result = adminService.checkPhoneNumberToUpdate(employeeId, phoneNumber);
+		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+	}
+
 
 }
