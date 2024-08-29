@@ -124,34 +124,48 @@
                 </configuration>
             </plugin>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.12.0</version> <!-- Updated version -->
-            <configuration>
-                <source>17</source>
-                <target>17</target>
-                <release>17</release> <!-- Added release configuration -->
-            </configuration>
-        </plugin>
-            <plugin>
-      <groupId>com.heroku</groupId>
+      <groupId>com.heroku.sdk</groupId>
       <artifactId>heroku-maven-plugin</artifactId>
-      <version>3.1.2</version>  <!-- Latest version -->
+      <version>2.0.0</version>
       <configuration>
-        <appName>lms-backend-96028d2bb754</appName>
         <processTypes>
-          <web>java -jar target/UserHistory-0.0.1-SNAPSHOT.jar</web>
+          <web>java $JAVA_OPTS -cp target/classes:target/dependency/* com.mapping.UserHistory</web>
         </processTypes>
+        <appName>lms-backend-96028d2bb754</appName>
       </configuration>
-      <executions>
-        <execution>
-          <goals>
-            <goal>deploy-war</goal>
-          </goals>
-        </execution>
-      </executions>
     </plugin>
         </plugins>
     </build>
+
+	<profiles>
+  <profile>
+    <id>test</id>
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>com.heroku.sdk</groupId>
+          <artifactId>heroku-maven-plugin</artifactId>
+          <configuration>
+            <appName>lms-backend-test</appName>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
+  </profile>
+  <profile>
+    <id>prod</id>
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>com.heroku.sdk</groupId>
+          <artifactId>heroku-maven-plugin</artifactId>
+          <configuration>
+            <appName>lms-backend-96028d2bb754</appName>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
+  </profile>
+</profiles>
 
 </project>
