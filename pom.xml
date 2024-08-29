@@ -137,35 +137,4 @@
         </plugins>
     </build>
 
-	<profiles>
-  <profile>
-    <id>test</id>
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>com.heroku.sdk</groupId>
-          <artifactId>heroku-maven-plugin</artifactId>
-          <configuration>
-            <appName>lms-backend-test</appName>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
-  </profile>
-  <profile>
-    <id>prod</id>
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>com.heroku.sdk</groupId>
-          <artifactId>heroku-maven-plugin</artifactId>
-          <configuration>
-            <appName>lms-backend-96028d2bb754</appName>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
-  </profile>
-</profiles>
-
 </project>
